@@ -37,12 +37,12 @@ namespace SoxSharp
     public ByteOrderType? ByteOrder { get; set; }
     
     /// <summary>
-    /// Number of channels of audio data.
+    /// Number of audio channels.
     /// </summary>
     public UInt16? Channels { get; set; }
     
     /// <summary>
-    /// Sample rate of audio.
+    /// Audio sample rate.
     /// </summary>
     public UInt32? SampleRate { get; set; }
        
@@ -52,12 +52,19 @@ namespace SoxSharp
     public bool? Glob { get; set; }
 
 
+    /// <summary>
+    /// Default constructor.
+    /// </summary>
     public FormatOptions()
     {
       Glob = true;
     }
 
 
+    /// <summary>
+    /// Translate a <see cref="FormatOptions"/> instance to a set of command arguments to be passed to SoX (invalidates <see cref="Object.ToString()"/>).
+    /// </summary>
+    /// <returns>String containing SoX command arguments.</returns>
     public override string ToString()
     {
       StringBuilder formatOptions = new StringBuilder();

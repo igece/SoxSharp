@@ -27,6 +27,10 @@ namespace SoxSharp
     }
 
 
+    /// <summary>
+    /// Translate a <see cref="OutputFormatOptions"/> instance to a set of command arguments to be passed to SoX to be applied to the output file (adds additional command arguments to <see cref="FormatOptions.ToString()"/>).
+    /// </summary>
+    /// <returns>String containing SoX command arguments.</returns>
     public override string ToString()
     {
       StringBuilder outputOptions = new StringBuilder(base.ToString());
