@@ -89,16 +89,9 @@ namespace SoxSharp
       if (!File.Exists(inputFile))
         throw new FileNotFoundException("File not found: " + inputFile);
 
-      using (Process soxCmd = new Process())
+      using (Process soxCmd = CreateSoxProcess())
       {
-        soxCmd.StartInfo.FileName = soxExecutable_;
-        soxCmd.StartInfo.ErrorDialog = false;
-        soxCmd.StartInfo.CreateNoWindow = true;
-        soxCmd.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-        soxCmd.StartInfo.UseShellExecute = false;
-        soxCmd.StartInfo.RedirectStandardError = true;
         soxCmd.StartInfo.RedirectStandardOutput = true;
-        soxCmd.EnableRaisingEvents = true;
         soxCmd.StartInfo.Arguments = "--info " + inputFile;
         soxCmd.Start();
         
@@ -142,16 +135,8 @@ namespace SoxSharp
 
     public int Process(string inputFile, string outputFile)
     {
-      using (Process soxCmd = new Process())
-      {
-        soxCmd.StartInfo.FileName = soxExecutable_;
-        soxCmd.StartInfo.ErrorDialog = false;
-        soxCmd.StartInfo.CreateNoWindow = true;
-        soxCmd.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-        soxCmd.StartInfo.UseShellExecute = false;
-        soxCmd.StartInfo.RedirectStandardError = true;
-        soxCmd.EnableRaisingEvents = true;
-        
+      using (Process soxCmd = CreateSoxProcess())
+      {       
         soxCmd.ErrorDataReceived += ((sender, received) =>
         {
           if (received.Data != null)
@@ -217,6 +202,22 @@ namespace SoxSharp
         return;
 
       disposed_ = true;
+    }
+
+
+    private Process CreateSoxProcess()
+    {
+      Process soxProc = new Process();
+
+      soxProc.StartInfo.FileName = soxExecutable_;
+      soxProc.StartInfo.ErrorDialog = false;
+      soxProc.StartInfo.CreateNoWindow = true;
+      soxProc.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+      soxProc.StartInfo.UseShellExecute = false;
+      soxProc.StartInfo.RedirectStandardError = true;
+      soxProc.EnableRaisingEvents = true;
+
+      return soxProc;
     }
   }
 }
