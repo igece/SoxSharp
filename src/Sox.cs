@@ -16,7 +16,7 @@ namespace SoxSharp
   public class Sox : IDisposable
   {
     /// <summary>
-    /// Bla, bla bla...
+    /// Provides updated progress status while <see cref="Sox.Process"/> is being executed.
     /// </summary>
     public event EventHandler<ProgressEventArgs> OnProgress = null;
 
@@ -32,48 +32,27 @@ namespace SoxSharp
     public bool? Multithreaded { get; set; }
 
     /// <summary>
-    /// 
+    /// Input format options.
     /// </summary>
     public InputFormatOptions Input { get; protected set; }
 
     /// <summary>
-    /// 
+    /// Output format options.
     /// </summary>
     public OutputFormatOptions Output { get; protected set; }
 
 
     private bool disposed_ = false;
 
-    private string soxExecutable_;
-
-    private Regex infoRegex_ = new Regex(@"Input File\s*: .+\r\nChannels\s*: (\d+)\r\nSample Rate\s*: (\d+)\r\nPrecision\s*: ([\s\S]+?)\r\nDuration\s*: (\d{2}:\d{2}:\d{2}\.?\d{2}?)[\s\S]+?\r\nFile Size\s*: (\d+\.?\d{0,2}?[k|M|G]?)\r\nBit Rate\s*: (\d+\.?\d{0,2}?k?)\r\nSample Encoding\s*: (.+)");
-    private Regex progressRegex_ = new Regex(@"In:(\d{1,3}\.?\d{0,2})%\s+(\d{2}:\d{2}:\d{2}\.?\d{0,2})\s+\[(\d{2}:\d{2}:\d{2}\.?\d{0,2})\]\s+Out:(\d+\.?\d{0,2}[k|M|G]?)");
+    private static readonly byte[] SoxHash = new byte[] { 0x05, 0xd5, 0x00, 0x8a, 0x50, 0x56, 0xe2, 0x8e, 0x45, 0xad, 0x1e, 0xb7, 0xd7, 0xbe, 0x9f, 0x03 };
+    private static readonly Regex RegexInfo = new Regex(@"Input File\s*: .+\r\nChannels\s*: (\d+)\r\nSample Rate\s*: (\d+)\r\nPrecision\s*: ([\s\S]+?)\r\nDuration\s*: (\d{2}:\d{2}:\d{2}\.?\d{2}?)[\s\S]+?\r\nFile Size\s*: (\d+\.?\d{0,2}?[k|M|G]?)\r\nBit Rate\s*: (\d+\.?\d{0,2}?k?)\r\nSample Encoding\s*: (.+)");
+    private static readonly Regex RegexProgress = new Regex(@"In:(\d{1,3}\.?\d{0,2})%\s+(\d{2}:\d{2}:\d{2}\.?\d{0,2})\s+\[(\d{2}:\d{2}:\d{2}\.?\d{0,2})\]\s+Out:(\d+\.?\d{0,2}[k|M|G]?)");
     
 
     public Sox()
     {
       Input = new InputFormatOptions();
       Output = new OutputFormatOptions();
-
-      soxExecutable_ = Path.Combine(Path.GetTempPath(), "sox.exe");
-
-      byte[] soxHash = new byte[] { 0x05, 0xd5, 0x00, 0x8a, 0x50, 0x56, 0xe2, 0x8e, 0x45, 0xad, 0x1e, 0xb7, 0xd7, 0xbe, 0x9f, 0x03 };
-
-      if (!File.Exists(soxExecutable_))
-        File.WriteAllBytes(soxExecutable_, SoxSharp.Resources.sox);
-      else
-      {
-        using (MD5 md5 = MD5.Create())
-        {
-          using (FileStream stream = File.OpenRead(soxExecutable_))
-          {
-            byte[] hash = md5.ComputeHash(stream);
-            
-            if (!hash.SequenceEqual(soxHash))
-              File.WriteAllBytes(soxExecutable_, SoxSharp.Resources.sox);
-          }
-        }
-      }
     }
 
 
@@ -100,7 +79,7 @@ namespace SoxSharp
 
         if (result != null)
         {
-          Match match = infoRegex_.Match(result);
+          Match match = RegexInfo.Match(result);
 
           if (match.Success)
           {
@@ -119,16 +98,16 @@ namespace SoxSharp
 
             catch (Exception ex)
             {
-              throw new Exception("Unexpected output from SoX", ex);
+              throw new SoxException("Unexpected output from SoX", ex);
             }
           }
           else
           {
-            throw new Exception(result);
+            throw new SoxException(result);
           }
         }
 
-        throw new Exception("Unexpected output from SoX");
+        throw new SoxException("Unexpected output from SoX");
       }
     }
 
@@ -143,7 +122,7 @@ namespace SoxSharp
           {
             if (OnProgress != null)
             {
-              Match match = progressRegex_.Match(received.Data);
+              Match match = RegexProgress.Match(received.Data);
 
               if (match.Success)
               {
@@ -159,7 +138,7 @@ namespace SoxSharp
 
                 catch (Exception ex)
                 {
-                  throw new Exception("Unexpected output from SoX", ex);
+                  throw new SoxException("Unexpected output from SoX", ex);
                 }                
               }
             }
@@ -187,12 +166,70 @@ namespace SoxSharp
         args.Add(outputFile);
 
         soxCmd.StartInfo.Arguments = String.Join(" ", args);
-        soxCmd.Start();
-        soxCmd.BeginErrorReadLine();
-        soxCmd.WaitForExit();
 
-        return soxCmd.ExitCode;
+        try
+        {
+          soxCmd.Start();
+          soxCmd.BeginErrorReadLine();
+          soxCmd.WaitForExit();
+
+          return soxCmd.ExitCode;
+        }
+
+        catch (Exception ex)
+        {
+          throw new SoxException("Cannot spawn Sox process", ex);
+        }
       }
+    }
+
+
+    protected Process CreateSoxProcess()
+    {
+      string soxExecutable;
+
+      // Obtain the path for the SoX executable.
+      // The SoX executable is directly extracted from the library resources
+      // and only if it was not previously extracted (file MD5 hash check is
+      // performed to ensure it is the expected one).
+
+      try
+      {
+        soxExecutable = Path.Combine(Path.GetTempPath(), "sox.exe");
+
+        if (!File.Exists(soxExecutable))
+          File.WriteAllBytes(soxExecutable, SoxSharp.Resources.sox);
+        else
+        {
+          using (MD5 md5 = MD5.Create())
+          {
+            using (FileStream stream = File.OpenRead(soxExecutable))
+            {
+              byte[] hash = md5.ComputeHash(stream);
+
+              if (!SoxHash.SequenceEqual(hash))
+                File.WriteAllBytes(soxExecutable, SoxSharp.Resources.sox);
+            }
+          }
+        }
+      }
+
+      catch (Exception ex)
+      {
+        throw new SoxException("Cannot extract SoX executable", ex);
+      }
+
+      Process soxProc = new Process();
+
+      soxProc.StartInfo.FileName = soxExecutable;
+      soxProc.StartInfo.ErrorDialog = false;
+      soxProc.StartInfo.CreateNoWindow = true;
+      soxProc.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+      soxProc.StartInfo.UseShellExecute = false;
+      soxProc.StartInfo.RedirectStandardError = true;
+      soxProc.EnableRaisingEvents = true;
+
+      return soxProc;
     }
 
 
@@ -202,22 +239,6 @@ namespace SoxSharp
         return;
 
       disposed_ = true;
-    }
-
-
-    private Process CreateSoxProcess()
-    {
-      Process soxProc = new Process();
-
-      soxProc.StartInfo.FileName = soxExecutable_;
-      soxProc.StartInfo.ErrorDialog = false;
-      soxProc.StartInfo.CreateNoWindow = true;
-      soxProc.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-      soxProc.StartInfo.UseShellExecute = false;
-      soxProc.StartInfo.RedirectStandardError = true;
-      soxProc.EnableRaisingEvents = true;
-
-      return soxProc;
     }
   }
 }

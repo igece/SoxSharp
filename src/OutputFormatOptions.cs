@@ -3,6 +3,9 @@
 
 namespace SoxSharp
 {
+  /// <summary>
+  /// Output format options. The value for any property not set is inferred from the input file..
+  /// </summary>
   public class OutputFormatOptions : FormatOptions
   {
     /// <summary>

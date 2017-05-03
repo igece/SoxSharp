@@ -7,7 +7,7 @@ namespace SoxSharp
   public abstract class FormatOptions
   {
     /// <summary>
-    /// Force the audio file type.
+    /// Audio file type.
     /// </summary>
     public FileType? Type { get; set; }
     
@@ -55,7 +55,7 @@ namespace SoxSharp
     /// <summary>
     /// Default constructor.
     /// </summary>
-    public FormatOptions()
+    protected FormatOptions()
     {
       Glob = true;
     }

@@ -18,19 +18,19 @@ namespace SoxSharp
     {
       UInt64 multiplier = 1;
 
-      if (formattedSize.EndsWith("k"))
+			if (formattedSize.EndsWith("k", StringComparison.InvariantCulture))
       {
         multiplier = 1024;
         formattedSize = formattedSize.Substring(0, formattedSize.Length - 1);
       }
 
-      else if (formattedSize.EndsWith("M"))
+      else if (formattedSize.EndsWith("M", StringComparison.InvariantCulture))
       {
         multiplier = 1024 * 1024;
         formattedSize = formattedSize.Substring(0, formattedSize.Length - 1);
       }
 
-      else if (formattedSize.EndsWith("G"))
+      else if (formattedSize.EndsWith("G", StringComparison.InvariantCulture))
       {
         multiplier = 1024 * 1024 * 1024;
         formattedSize = formattedSize.Substring(0, formattedSize.Length - 1);
@@ -49,19 +49,19 @@ namespace SoxSharp
     {
       UInt32 multiplier = 1;
 
-      if (formattedSize.EndsWith("k"))
+      if (formattedSize.EndsWith("k", StringComparison.InvariantCulture))
       {
         multiplier = 1024;
         formattedSize = formattedSize.Substring(0, formattedSize.Length - 1);
       }
 
-      else if (formattedSize.EndsWith("M"))
+      else if (formattedSize.EndsWith("M", StringComparison.InvariantCulture))
       {
         multiplier = 1024 * 1024;
         formattedSize = formattedSize.Substring(0, formattedSize.Length - 1);
       }
 
-      else if (formattedSize.EndsWith("G"))
+      else if (formattedSize.EndsWith("G", StringComparison.InvariantCulture))
       {
         multiplier = 1024 * 1024 * 1024;
         formattedSize = formattedSize.Substring(0, formattedSize.Length - 1);

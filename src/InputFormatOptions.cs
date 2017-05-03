@@ -3,6 +3,9 @@
 
 namespace SoxSharp
 {
+  /// <summary>
+  /// Input format options.
+  /// </summary>
   public class InputFormatOptions : FormatOptions
   {
     /// <summary>
