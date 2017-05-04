@@ -4,6 +4,9 @@ using System.Text;
 
 namespace SoxSharp
 {
+  /// <summary>
+  /// Format options that are applicable to both input and output files.
+  /// </summary>
   public abstract class FormatOptions
   {
     /// <summary>

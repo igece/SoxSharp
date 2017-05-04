@@ -4,7 +4,7 @@
 namespace SoxSharp
 {
   /// <summary>
-  /// Output format options. The value for any property not set is inferred from the input file..
+  /// Format options to be applied to the output file. For any property not set here, SoX will infer the value from the input file.
   /// </summary>
   public class OutputFormatOptions : FormatOptions
   {
@@ -24,6 +24,9 @@ namespace SoxSharp
     public string AddComment { get; set; }
 
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="T:SoxSharp.OutputFormatOptions"/> class.
+    /// </summary>
     public OutputFormatOptions()
     : base()
     {

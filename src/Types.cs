@@ -1,5 +1,8 @@
 ﻿namespace SoxSharp
 {
+  /// <summary>
+  /// Audio file formats.
+  /// </summary>
   public enum FileType
   {
     SVX,
@@ -80,6 +83,9 @@
     XA
   }
 
+  /// <summary>
+  /// Encoding type.
+  /// </summary>
   public enum EncodingType
   {
     SignedInteger,
@@ -92,6 +98,9 @@
     GsmFullRate
   }
 
+  /// <summary>
+  /// Byte order type.
+  /// </summary>
   public enum ByteOrderType
   {
     BigEndian,
