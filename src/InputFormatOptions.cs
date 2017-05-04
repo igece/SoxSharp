@@ -29,7 +29,7 @@ namespace SoxSharp
 
 
     /// <summary>
-    /// Translate a <see cref="InputFormatOptions"/> instance to a set of command arguments to be passed to SoX to be applied to the input file (invalidates <see cref="Object.ToString()"/>).
+    /// Translate a <see cref="InputFormatOptions"/> instance to a set of command arguments to be passed to SoX to be applied to the input file (invalidates <see cref="object.ToString()"/>).
     /// </summary>
     /// <returns>String containing SoX command arguments.</returns>
     public override string ToString()

@@ -11,7 +11,7 @@ using System.Text.RegularExpressions;
 namespace SoxSharp
 {
   /// <summary>
-  /// Encapsulates all 
+  /// Encapsulates all the information needed to launch
   /// </summary>
   public class Sox : IDisposable
   {
