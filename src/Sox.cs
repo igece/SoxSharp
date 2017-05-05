@@ -22,6 +22,14 @@ namespace SoxSharp
 
 
     /// <summary>
+    /// Location of the SoX binary to be used by the library. If no path is specified (null or empty string) AND
+    /// only on Windows platforms SoxSharp will use a binary copy included within the library (version XXX).
+    /// On MacOSX and Linux systems, this property must be correctly set before any call to the <see cref="Process"/> method.
+    /// </summary>
+    /// <value>The binary path.</value>
+    public string BinaryPath { get; set; }
+
+    /// <summary>
     /// Size of all processing buffers (default is 8192).
     /// </summary>
     public UInt16? Buffer { get; set; }
@@ -188,35 +196,59 @@ namespace SoxSharp
     {
       string soxExecutable;
 
-      // Obtain the path for the SoX executable.
-      // The SoX executable is directly extracted from the library resources
-      // and only if it was not previously extracted (file MD5 hash check is
-      // performed to ensure it is the expected one).
-
-      try
+      if ((Environment.OSVersion.Platform == PlatformID.MacOSX) ||
+          (Environment.OSVersion.Platform == PlatformID.Unix))
       {
-        soxExecutable = Path.Combine(Path.GetTempPath(), "sox.exe");
+        if (String.IsNullOrEmpty(BinaryPath))
+          throw new SoxException("SoX path not specified");
 
-        if (!File.Exists(soxExecutable))
-          File.WriteAllBytes(soxExecutable, SoxSharp.Resources.sox);
+        if (File.Exists(BinaryPath))
+          soxExecutable = BinaryPath;
         else
-        {
-          using (MD5 md5 = MD5.Create())
-          {
-            using (FileStream stream = File.OpenRead(soxExecutable))
-            {
-              byte[] hash = md5.ComputeHash(stream);
-
-              if (!SoxHash.SequenceEqual(hash))
-                File.WriteAllBytes(soxExecutable, SoxSharp.Resources.sox);
-            }
-          }
-        }
+          throw new FileNotFoundException("SoX executable not found");
       }
 
-      catch (Exception ex)
+      else
       {
-        throw new SoxException("Cannot extract SoX executable", ex);
+        if (String.IsNullOrEmpty(BinaryPath))
+        {
+          // The SoX executable is directly extracted from the library resources
+          // and only if it was not previously extracted (file MD5 hash check is
+          // performed to ensure it is the expected one).
+
+          try
+          {
+            soxExecutable = Path.Combine(Path.GetTempPath(), "sox.exe");
+
+            if (!File.Exists(soxExecutable))
+              File.WriteAllBytes(soxExecutable, SoxSharp.Resources.sox);
+            else
+            {
+              using (MD5 md5 = MD5.Create())
+              {
+                using (FileStream stream = File.OpenRead(soxExecutable))
+                {
+                  byte[] hash = md5.ComputeHash(stream);
+
+                  if (!SoxHash.SequenceEqual(hash))
+                    File.WriteAllBytes(soxExecutable, SoxSharp.Resources.sox);
+                }
+              }
+            }
+          }
+
+          catch (Exception ex)
+          {
+            throw new SoxException("Cannot extract SoX executable", ex);
+          }
+        }
+        else
+        {
+          if (File.Exists(BinaryPath))
+            soxExecutable = BinaryPath;
+          else
+            throw new FileNotFoundException("SoX executable not found");
+        }
       }
 
       Process soxProc = new Process();
