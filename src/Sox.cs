@@ -57,20 +57,33 @@ namespace SoxSharp
     private static readonly Regex RegexProgress = new Regex(@"In:(\d{1,3}\.?\d{0,2})%\s+(\d{2}:\d{2}:\d{2}\.?\d{0,2})\s+\[(\d{2}:\d{2}:\d{2}\.?\d{0,2})\]\s+Out:(\d+\.?\d{0,2}[k|M|G]?)");
     
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="T:SoxSharp.Sox"/> class.
+    /// </summary>
     public Sox()
     {
       Input = new InputFormatOptions();
       Output = new OutputFormatOptions();
     }
 
-
+    /// <summary>
+    /// Releases all resource used by the <see cref="T:SoxSharp.Sox"/> object.
+    /// </summary>
+    /// <remarks>Call <see cref="Dispose"/> when you are finished using the <see cref="T:SoxSharp.Sox"/> instance. This
+    /// <see cref="Dispose"/> method leaves the <see cref="T:SoxSharp.Sox"/> instance in an unusable state. After calling
+    /// it, you must release all references to the instance so the garbage
+    /// collector can reclaim the memory that it was occupying.</remarks>
     public void Dispose()
     {
       Dispose(true);
       GC.SuppressFinalize(this);
     }
 
-
+    /// <summary>
+    /// Gets the info.
+    /// </summary>
+    /// <returns>The info.</returns>
+    /// <param name="inputFile">Input file.</param>
     public FileInfo GetInfo(string inputFile)
     {
       if (!File.Exists(inputFile))
@@ -119,7 +132,12 @@ namespace SoxSharp
       }
     }
 
-
+    /// <summary>
+    /// Spawns a new SoX process using the specified options in this instance.
+    /// </summary>
+    /// <returns>Exit code returned by SoX.</returns>
+    /// <param name="inputFile">Audio file to be processed.</param>
+    /// <param name="outputFile">Output file.</param>
     public int Process(string inputFile, string outputFile)
     {
       using (Process soxCmd = CreateSoxProcess())
@@ -191,7 +209,10 @@ namespace SoxSharp
       }
     }
 
-
+    /// <summary>
+    /// Create a new <see cref="System.Diagnostics.Process"/> instance prepared to run SoX.
+    /// </summary>
+    /// <returns>The SoX process instance.</returns>
     protected Process CreateSoxProcess()
     {
       string soxExecutable;

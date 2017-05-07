@@ -5,6 +5,9 @@
   /// </summary>
   public enum FileType
   {
+    /// <summary>
+    /// Amiga audio format (a subformat of the Interchange File Format).
+    /// </summary>
     SVX,
     AIF,
     AIFC,
@@ -103,8 +106,17 @@
   /// </summary>
   public enum ByteOrderType
   {
+    /// <summary>
+    /// Big endian byte order.
+    /// </summary>
     BigEndian,
+    /// <summary>
+    /// Little endian byte order.
+    /// </summary>
     LittleEndian,
+    /// <summary>
+    /// Swap the current byte order.
+    /// </summary>
     Swap
   }
 }

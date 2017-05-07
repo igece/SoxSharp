@@ -34,6 +34,9 @@ namespace SoxSharp
     /// </summary>
     public UInt64 Size { get; protected set; }
 
+    /// <summary>
+    /// Audio bitrate.
+    /// </summary>
     public UInt32 BitRate { get; protected set; }
 
     /// <summary>
