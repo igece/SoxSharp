@@ -6,15 +6,24 @@
   public enum FileType
   {
     /// <summary>
-    /// Amiga audio format (a subformat of the Interchange File Format).
+    /// Amiga 8SVX musical instrument description format.
     /// </summary>
     SVX,
     AIF,
     AIFC,
+    /// <summary>
+    /// Audio Interchage File Format.
+    /// </summary>
     AIFF,
     AIFFC,
     AL,
+    /// <summary>
+    /// Ambisonic B‐Format.
+    /// </summary>
     AMB,
+    /// <summary>
+    /// Sun Microsystems AU file.
+    /// </summary>
     AU,
     AVR,
     CDDA,
