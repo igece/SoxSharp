@@ -25,6 +25,7 @@ namespace SoxSharp
       Processed = processed;
       Remaining = remaining;
       OutputSize = outputSize;
+      Abort = false;
     }
 
     /// <summary>
@@ -46,5 +47,11 @@ namespace SoxSharp
     /// Actual size of the generated output file.
     /// </summary>
     public UInt64 OutputSize { get; private set; }
+
+    /// <summary>
+    /// Allows to cancel the current operation.
+    /// </summary>
+    /// <value><c>true</c> to cancel; otherwise, leave as <c>false</c>.</value>
+    public bool Abort { get; set; }
   }
 }
