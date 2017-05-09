@@ -49,7 +49,7 @@ namespace SoxSharp
     /// </summary>
     public OutputFormatOptions Output { get; protected set; }
 
-
+    private Process soxProcess_ = null;
     private bool disposed_ = false;
 
     private static readonly byte[] SoxHash = new byte[] { 0x05, 0xd5, 0x00, 0x8a, 0x50, 0x56, 0xe2, 0x8e, 0x45, 0xad, 0x1e, 0xb7, 0xd7, 0xbe, 0x9f, 0x03 };
@@ -66,6 +66,7 @@ namespace SoxSharp
       Output = new OutputFormatOptions();
     }
 
+
     /// <summary>
     /// Releases all resource used by the <see cref="T:SoxSharp.Sox"/> object.
     /// </summary>
@@ -79,10 +80,11 @@ namespace SoxSharp
       GC.SuppressFinalize(this);
     }
 
+
     /// <summary>
-    /// Gets the info.
+    /// Gets information about the given file. 
     /// </summary>
-    /// <returns>The info.</returns>
+    /// <returns>File information as a <see cref="SoxSharp.FileInfo"/> instance.</returns>
     /// <param name="inputFile">Input file.</param>
     public FileInfo GetInfo(string inputFile)
     {
@@ -132,6 +134,7 @@ namespace SoxSharp
       }
     }
 
+
     /// <summary>
     /// Spawns a new SoX process using the specified options in this instance.
     /// </summary>
@@ -140,9 +143,12 @@ namespace SoxSharp
     /// <param name="outputFile">Output file.</param>
     public int Process(string inputFile, string outputFile)
     {
-      using (Process soxCmd = CreateSoxProcess())
+      //Process soxCmd = CreateSoxProcess();
+      soxProcess_ = CreateSoxProcess();
+
+      try
       {       
-        soxCmd.ErrorDataReceived += ((sender, received) =>
+        soxProcess_.ErrorDataReceived += ((sender, received) =>
         {
           if (received.Data != null)
           {
@@ -158,8 +164,12 @@ namespace SoxSharp
                   TimeSpan processed = TimeSpan.ParseExact(match.Groups[2].Value, @"hh\:mm\:ss\.ff", CultureInfo.InvariantCulture);
                   TimeSpan remaining = TimeSpan.ParseExact(match.Groups[3].Value, @"hh\:mm\:ss\.ff", CultureInfo.InvariantCulture);
                   UInt64 outputSize = FormattedSize.ToUInt64(match.Groups[4].Value);
-                  
-                  OnProgress(sender, new ProgressEventArgs(progress, processed, remaining, outputSize));
+
+                  ProgressEventArgs eventArgs = new ProgressEventArgs(progress, processed, remaining, outputSize);
+                  OnProgress(sender, eventArgs);
+
+                  if (eventArgs.Abort)
+                    Abort();
                 }
 
                 catch (Exception ex)
@@ -170,7 +180,7 @@ namespace SoxSharp
             }
           }
         });
-        
+
         List<string> args = new List<string>();
 
         // Global options.
@@ -191,20 +201,50 @@ namespace SoxSharp
         args.Add(Output.ToString());
         args.Add(outputFile);
 
-        soxCmd.StartInfo.Arguments = String.Join(" ", args);
+        soxProcess_.StartInfo.Arguments = String.Join(" ", args);
 
         try
         {
-          soxCmd.Start();
-          soxCmd.BeginErrorReadLine();
-          soxCmd.WaitForExit();
+          soxProcess_.Start();
+          soxProcess_.BeginErrorReadLine();
+          soxProcess_.WaitForExit();
 
-          return soxCmd.ExitCode;
+          return soxProcess_.ExitCode;
         }
 
         catch (Exception ex)
         {
-          throw new SoxException("Cannot spawn Sox process", ex);
+          throw new SoxException("Cannot spawn SoX process", ex);
+        }
+      }
+
+      finally
+      {
+        if (soxProcess_ != null)
+        {
+          soxProcess_.Dispose();
+          soxProcess_ = null;
+        }
+      }
+    }
+
+
+    /// <summary>
+    /// Kills the SoX process.
+    /// </summary>
+    public void Abort()
+    {
+      if (soxProcess_ != null)
+      {
+        try
+        {
+          soxProcess_.Kill();
+        }
+
+        finally
+        {
+          soxProcess_.Dispose();
+          soxProcess_ = null;
         }
       }
     }
