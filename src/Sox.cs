@@ -209,7 +209,10 @@ namespace SoxSharp
           soxProcess_.BeginErrorReadLine();
           soxProcess_.WaitForExit();
 
-          return soxProcess_.ExitCode;
+          if (soxProcess_ != null)
+            return soxProcess_.ExitCode;
+          else
+            return -1;
         }
 
         catch (Exception ex)
@@ -330,6 +333,9 @@ namespace SoxSharp
     {
       if (disposed_)
         return;
+
+      if ((soxProcess_ != null) && (!soxProcess_.HasExited))
+        Abort();
 
       disposed_ = true;
     }
