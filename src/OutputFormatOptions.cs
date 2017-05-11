@@ -45,10 +45,10 @@ namespace SoxSharp
         outputOptions.Append(" --compression " + Compression.Value);
 
       if (AddComment != null)
-        outputOptions.Append(" --add-comment " + AddComment);
+        outputOptions.Append(" --add-comment \"" + AddComment + "\"");
 
       if (Comment != null)
-        outputOptions.Append(" --comment " + Comment);
+        outputOptions.Append(" --comment \"" + Comment + "\"");
 
       return outputOptions.ToString();
     }
