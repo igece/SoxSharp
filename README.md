@@ -2,9 +2,8 @@
 
 SoxSharp is a C# library that serves as a wrapper to [SoX - the Sound eXchange tool](http://sox.sourceforge.net/).
 
-It comes bundled with the SoX 14.4.2 Win32 binary, so if you're on a Windows platform, you don't need any additional prerequisites to start using it.
+It comes bundled with the SoX 14.4.2 Win32 binary, so if you're on a Windows platform, you don't need any additional prerequisites to start using it. On other platforms (MacOSX and Linux) you will need to set the `SoX.BinaryPath` property to the location where SoX binaries are stored.
 
-Although the source code is fully compatible with Xamarin, using the library in MacOSX or Linux systems requires setting the `SoX.BinaryPath` property to the location where SoX binaries are stored.
 
 ### How it works
 
@@ -31,6 +30,7 @@ void sox_OnProgress(object sender, ProgressEventArgs e)
 }
 ```
 The `Process` method blocks the calling thread until the spawned SoX process ends. 
+
 
 ### Documentation
 

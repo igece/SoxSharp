@@ -53,9 +53,9 @@ namespace SoxSharp
     private bool disposed_ = false;
 
     private static readonly byte[] SoxHash = new byte[] { 0x05, 0xd5, 0x00, 0x8a, 0x50, 0x56, 0xe2, 0x8e, 0x45, 0xad, 0x1e, 0xb7, 0xd7, 0xbe, 0x9f, 0x03 };
-    private static readonly Regex RegexInfo = new Regex(@"Input File\s*: .+\r\nChannels\s*: (\d+)\r\nSample Rate\s*: (\d+)\r\nPrecision\s*: ([\s\S]+?)\r\nDuration\s*: (\d{2}:\d{2}:\d{2}\.?\d{2}?)[\s\S]+?\r\nFile Size\s*: (\d+\.?\d{0,2}?[k|M|G]?)\r\nBit Rate\s*: (\d+\.?\d{0,2}?k?)\r\nSample Encoding\s*: (.+)");
+    private static readonly Regex RegexInfo = new Regex(@"Input File\s*: .+\r?\nChannels\s*: (\d+)\r?\nSample Rate\s*: (\d+)\r?\nPrecision\s*: ([\s\S]+?)\r?\nDuration\s*: (\d{2}:\d{2}:\d{2}\.?\d{2}?)[\s\S]+?\r?\nFile Size\s*: (\d+\.?\d{0,2}?[k|M|G]?)\r?\nBit Rate\s*: (\d+\.?\d{0,2}?[k|M|G]?)\r?\nSample Encoding\s*: (.+)");
     private static readonly Regex RegexProgress = new Regex(@"In:(\d{1,3}\.?\d{0,2})%\s+(\d{2}:\d{2}:\d{2}\.?\d{0,2})\s+\[(\d{2}:\d{2}:\d{2}\.?\d{0,2})\]\s+Out:(\d+\.?\d{0,2}[k|M|G]?)");
-    
+    private static readonly Regex RegexFail = new Regex(@"(FAIL)\s(.+)");
 
     /// <summary>
     /// Initializes a new instance of the <see cref="T:SoxSharp.Sox"/> class.
@@ -64,6 +64,14 @@ namespace SoxSharp
     {
       Input = new InputFormatOptions();
       Output = new OutputFormatOptions();
+    }
+
+
+    public Sox(string binaryPath)
+    {
+      Input = new InputFormatOptions();
+      Output = new OutputFormatOptions();
+      BinaryPath = binaryPath;
     }
 
 
@@ -124,10 +132,6 @@ namespace SoxSharp
               throw new SoxException("Unexpected output from SoX", ex);
             }
           }
-          else
-          {
-            throw new SoxException(result);
-          }
         }
 
         throw new SoxException("Unexpected output from SoX");
@@ -154,16 +158,16 @@ namespace SoxSharp
           {
             if (OnProgress != null)
             {
-              Match match = RegexProgress.Match(received.Data);
+              Match matchProgress = RegexProgress.Match(received.Data);
 
-              if (match.Success)
+              if (matchProgress.Success)
               {
                 try
                 {
-                  UInt16 progress = Convert.ToUInt16(double.Parse(match.Groups[1].Value, CultureInfo.InvariantCulture));
-                  TimeSpan processed = TimeSpan.ParseExact(match.Groups[2].Value, @"hh\:mm\:ss\.ff", CultureInfo.InvariantCulture);
-                  TimeSpan remaining = TimeSpan.ParseExact(match.Groups[3].Value, @"hh\:mm\:ss\.ff", CultureInfo.InvariantCulture);
-                  UInt64 outputSize = FormattedSize.ToUInt64(match.Groups[4].Value);
+                  UInt16 progress = Convert.ToUInt16(double.Parse(matchProgress.Groups[1].Value, CultureInfo.InvariantCulture));
+                  TimeSpan processed = TimeSpan.ParseExact(matchProgress.Groups[2].Value, @"hh\:mm\:ss\.ff", CultureInfo.InvariantCulture);
+                  TimeSpan remaining = TimeSpan.ParseExact(matchProgress.Groups[3].Value, @"hh\:mm\:ss\.ff", CultureInfo.InvariantCulture);
+                  UInt64 outputSize = FormattedSize.ToUInt64(matchProgress.Groups[4].Value);
 
                   ProgressEventArgs eventArgs = new ProgressEventArgs(progress, processed, remaining, outputSize);
                   OnProgress(sender, eventArgs);
@@ -178,6 +182,7 @@ namespace SoxSharp
                 }                
               }
             }
+            Console.WriteLine("Unkown output: " + received.Data);
           }
         });
 
@@ -322,6 +327,7 @@ namespace SoxSharp
       soxProc.StartInfo.CreateNoWindow = true;
       soxProc.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
       soxProc.StartInfo.UseShellExecute = false;
+      soxProc.StartInfo.RedirectStandardOutput = true;
       soxProc.StartInfo.RedirectStandardError = true;
       soxProc.EnableRaisingEvents = true;
 
