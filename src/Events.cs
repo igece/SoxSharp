@@ -4,12 +4,40 @@
 namespace SoxSharp
 {
   /// <summary>
+  /// Provides data for the <see cref="Sox.OnLogMessage"/> event. 
+  /// </summary>
+  public class LogMessageEventArgs : EventArgs
+  {
+    /// <summary>
+    /// Initializes a <see cref="T:SoxSharp.LogMessageEventArgs"/> instance with the provided values.
+    /// </summary>
+    /// <param name="logLevel">Message severity.</param>
+    /// <param name="message">Message text.</param>
+    public LogMessageEventArgs(LogLevelType logLevel, string message)
+    {
+      LogLevel = logLevel;
+      Message = message;
+    }
+
+    /// <summary>
+    /// Message severity.
+    /// </summary>
+    public LogLevelType LogLevel { get; private set; }
+
+    /// <summary>
+    /// Message text.
+    /// </summary>
+    public string Message { get; private set; }
+  }
+
+
+  /// <summary>
   /// Provides data for the <see cref="Sox.OnProgress"/> event.
   /// </summary>
   public class ProgressEventArgs : EventArgs
   {
     /// <summary>
-    /// Initializes a ProgressEventArgs instance with the provided values.
+    /// Initializes a <see cref="T:SoxSharp.ProgressEventArgs"/> instance with the provided values.
     /// </summary>
     /// <param name="progress">The actual progress value, from 0 to 100.</param>
     /// <param name="processed">File time that has been processed, based on file total duration.</param>

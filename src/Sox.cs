@@ -20,6 +20,10 @@ namespace SoxSharp
     /// </summary>
     public event EventHandler<ProgressEventArgs> OnProgress = null;
 
+    /// <summary>
+    /// Occurs when SoX sends a warning or error message.
+    /// </summary>
+    public event EventHandler<LogMessageEventArgs> OnLogMessage = null;
 
     /// <summary>
     /// Location of the SoX binary to be used by the library. If no path is specified (null or empty string) AND
@@ -55,7 +59,7 @@ namespace SoxSharp
     private static readonly byte[] SoxHash = new byte[] { 0x05, 0xd5, 0x00, 0x8a, 0x50, 0x56, 0xe2, 0x8e, 0x45, 0xad, 0x1e, 0xb7, 0xd7, 0xbe, 0x9f, 0x03 };
     private static readonly Regex RegexInfo = new Regex(@"Input File\s*: .+\r?\nChannels\s*: (\d+)\r?\nSample Rate\s*: (\d+)\r?\nPrecision\s*: ([\s\S]+?)\r?\nDuration\s*: (\d{2}:\d{2}:\d{2}\.?\d{2}?)[\s\S]+?\r?\nFile Size\s*: (\d+\.?\d{0,2}?[k|M|G]?)\r?\nBit Rate\s*: (\d+\.?\d{0,2}?[k|M|G]?)\r?\nSample Encoding\s*: (.+)");
     private static readonly Regex RegexProgress = new Regex(@"In:(\d{1,3}\.?\d{0,2})%\s+(\d{2}:\d{2}:\d{2}\.?\d{0,2})\s+\[(\d{2}:\d{2}:\d{2}\.?\d{0,2})\]\s+Out:(\d+\.?\d{0,2}[k|M|G]?)");
-    private static readonly Regex RegexFail = new Regex(@"(FAIL)\s(.+)");
+    private static readonly Regex RegexLog = new Regex(@"(FAIL|WARN)\s(.+)");
 
     /// <summary>
     /// Initializes a new instance of the <see cref="T:SoxSharp.Sox"/> class.
@@ -78,8 +82,8 @@ namespace SoxSharp
     /// <summary>
     /// Releases all resource used by the <see cref="T:SoxSharp.Sox"/> object.
     /// </summary>
-    /// <remarks>Call <see cref="Dispose"/> when you are finished using the <see cref="T:SoxSharp.Sox"/> instance. This
-    /// <see cref="Dispose"/> method leaves the <see cref="T:SoxSharp.Sox"/> instance in an unusable state. After calling
+    /// <remarks>Call <see cref="T:Sox.Dispose"/> when you are finished using the <see cref="T:SoxSharp.Sox"/> instance. This
+    /// <see cref="T:Sox.Dispose"/> method leaves the <see cref="T:SoxSharp.Sox"/> instance in an unusable state. After calling
     /// it, you must release all references to the instance so the garbage
     /// collector can reclaim the memory that it was occupying.</remarks>
     public void Dispose()
@@ -132,6 +136,9 @@ namespace SoxSharp
               throw new SoxException("Unexpected output from SoX", ex);
             }
           }
+
+          if (CheckForLogMessage(result))
+            return null;
         }
 
         throw new SoxException("Unexpected output from SoX");
@@ -174,6 +181,8 @@ namespace SoxSharp
 
                   if (eventArgs.Abort)
                     Abort();
+
+                  return;
                 }
 
                 catch (Exception ex)
@@ -182,7 +191,9 @@ namespace SoxSharp
                 }                
               }
             }
-            Console.WriteLine("Unkown output: " + received.Data);
+
+            if (CheckForLogMessage(received.Data))
+              return;
           }
         });
 
@@ -334,6 +345,37 @@ namespace SoxSharp
       return soxProc;
     }
 
+
+    protected bool CheckForLogMessage(string data)
+    {
+      Match match = RegexLog.Match(data);
+
+      if (match.Success)
+      {
+        try
+        {
+          string logLevel = match.Groups[1].Value;
+          string message = match.Groups[2].Value;
+
+          if (OnLogMessage != null)
+          {
+            if ("WARN".Equals(logLevel))
+              OnLogMessage(this, new LogMessageEventArgs(LogLevelType.Warning, message));
+            else if ("FAIL".Equals(logLevel))
+              OnLogMessage(this, new LogMessageEventArgs(LogLevelType.Error, message));
+          }
+
+          return true;
+        }
+
+        catch (Exception)
+        {
+          return false;
+        }
+      }
+
+      return false;
+    }
 
     private void Dispose(bool disposing)
     {

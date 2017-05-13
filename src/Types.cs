@@ -110,6 +110,7 @@
     GsmFullRate
   }
 
+
   /// <summary>
   /// Byte order type.
   /// </summary>
@@ -127,5 +128,15 @@
     /// Swap the current byte order.
     /// </summary>
     Swap
+  }
+
+
+  /// <summary>
+  /// SoX log message level.
+  /// </summary>
+  public enum LogLevelType
+  {
+    Error,
+    Warning
   }
 }
