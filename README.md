@@ -58,12 +58,6 @@ The `Process` method blocks the calling thread until the spawned SoX process end
 
 ### Library Reference
 
-A detailed description of all components of the library is available at the [repository wiki](https://github.com/igece/SoxSharp/wiki/ReferenceGuide). 
-
-
-### To do
-
-* Implement handling of SoX filters.
-* Port the Test application GUI so it can be used in MacOSX and Linux (using Xamarin).
+A detailed description of all components of the library is available at the [repository wiki](https://github.com/igece/SoxSharp/wiki/Reference-Guide). 
 
 
