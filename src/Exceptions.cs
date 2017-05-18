@@ -5,6 +5,7 @@ namespace SoxSharp
 {
   /// <summary>
   /// Exception that is thrown when a SoX operation fails.
+  /// </summary> 
   public class SoxException : Exception
   {
     /// <summary>
