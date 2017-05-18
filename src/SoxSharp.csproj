@@ -12,6 +12,16 @@
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <NuGetPackageImportStamp>f15e87c8</NuGetPackageImportStamp>
+    <PackOnBuild>true</PackOnBuild>
+    <PackageId>SoxSharp</PackageId>
+    <PackageVersion>1.0</PackageVersion>
+    <Authors>igece.labs</Authors>
+    <PackageLicenseUrl>https://github.com/igece/SoxSharp/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/igece/SoxSharp</PackageProjectUrl>
+    <Summary>Library that serves as a wrapper to SoX - the Sound eXchange tool.</Summary>
+    <PackageTags>sox wrapper audio</PackageTags>
+    <Title>SoxSharp</Title>
+    <Description>.</Description>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -25,7 +35,7 @@
     <DocumentationFile>..\bin\Debug\SoxSharp.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
+    <DebugType></DebugType>
     <Optimize>true</Optimize>
     <IntermediateOutputPath>..\obj\Release\</IntermediateOutputPath>
     <OutputPath>..\bin\Release\</OutputPath>
@@ -58,6 +68,8 @@
     <Compile Include="Types.cs" />
     <Compile Include="FormattedSize.cs" />
     <Compile Include="Exceptions.cs" />
+    <Compile Include="SoxProcess.cs" />
+    <Compile Include="RegexSet.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources.resx">
