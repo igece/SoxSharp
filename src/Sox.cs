@@ -27,11 +27,11 @@ namespace SoxSharp
 
     /// <summary>
     /// Location of the SoX binary to be used by the library. If no path is specified (null or empty string) AND
-    /// only on Windows platforms SoxSharp will use a binary copy included within the library (version XXX).
+    /// only on Windows platforms SoxSharp will use a binary copy included within the library (version 14.4.2).
     /// On MacOSX and Linux systems, this property must be correctly set before any call to the <see cref="Process"/> method.
     /// </summary>
     /// <value>The binary path.</value>
-    public string BinaryPath { get; set; }
+    public string Path { get; set; }
 
     /// <summary>
     /// Size of all processing buffers (default is 8192).
@@ -53,13 +53,9 @@ namespace SoxSharp
     /// </summary>
     public OutputFormatOptions Output { get; protected set; }
 
-    private Process soxProcess_ = null;
+    private SoxProcess soxProcess_ = null;
     private bool disposed_ = false;
 
-    private static readonly byte[] SoxHash = new byte[] { 0x05, 0xd5, 0x00, 0x8a, 0x50, 0x56, 0xe2, 0x8e, 0x45, 0xad, 0x1e, 0xb7, 0xd7, 0xbe, 0x9f, 0x03 };
-    private static readonly Regex RegexInfo = new Regex(@"Input File\s*: .+\r?\nChannels\s*: (\d+)\r?\nSample Rate\s*: (\d+)\r?\nPrecision\s*: ([\s\S]+?)\r?\nDuration\s*: (\d{2}:\d{2}:\d{2}\.?\d{2}?)[\s\S]+?\r?\nFile Size\s*: (\d+\.?\d{0,2}?[k|M|G]?)\r?\nBit Rate\s*: (\d+\.?\d{0,2}?[k|M|G]?)\r?\nSample Encoding\s*: (.+)");
-    private static readonly Regex RegexProgress = new Regex(@"In:(\d{1,3}\.?\d{0,2})%\s+(\d{2}:\d{2}:\d{2}\.?\d{0,2})\s+\[(\d{2}:\d{2}:\d{2}\.?\d{0,2})\]\s+Out:(\d+\.?\d{0,2}[k|M|G]?)");
-    private static readonly Regex RegexLog = new Regex(@"(FAIL|WARN)\s(.+)");
 
     /// <summary>
     /// Initializes a new instance of the <see cref="T:SoxSharp.Sox"/> class.
@@ -71,11 +67,11 @@ namespace SoxSharp
     }
 
 
-    public Sox(string binaryPath)
+    public Sox(string path)
     {
       Input = new InputFormatOptions();
       Output = new OutputFormatOptions();
-      BinaryPath = binaryPath;
+      Path = path;
     }
 
 
@@ -103,30 +99,34 @@ namespace SoxSharp
       if (!File.Exists(inputFile))
         throw new FileNotFoundException("File not found: " + inputFile);
 
-      using (Process soxCmd = CreateSoxProcess())
+			soxProcess_ = SoxProcess.Create(Path);
+
+			try
       {
-        soxCmd.StartInfo.RedirectStandardOutput = true;
-        soxCmd.StartInfo.Arguments = "--info " + inputFile;
-        soxCmd.Start();
+        soxProcess_.StartInfo.RedirectStandardOutput = true;
+        soxProcess_.StartInfo.Arguments = "--info " + inputFile;
+        soxProcess_.Start();
         
-        string result = soxCmd.StandardOutput.ReadToEnd();
-        soxCmd.WaitForExit();
+        string output = soxProcess_.StandardOutput.ReadToEnd();
 
-        if (result != null)
+        if (soxProcess_.WaitForExit(10000) == false)
+          throw new TimeoutException("SoX response timeout");
+        
+        if (output != null)
         {
-          Match match = RegexInfo.Match(result);
+          Match matchInfo = soxProcess_.Regex.FileInfo.Match(output);
 
-          if (match.Success)
+          if (matchInfo.Success)
           {
             try
             {
-              UInt16 channels = Convert.ToUInt16(double.Parse(match.Groups[1].Value, CultureInfo.InvariantCulture));
-              UInt32 sampleRate = Convert.ToUInt32(double.Parse(match.Groups[2].Value, CultureInfo.InvariantCulture));
-              UInt16 sampleSize = Convert.ToUInt16(double.Parse(new string(match.Groups[3].Value.Where(Char.IsDigit).ToArray()), CultureInfo.InvariantCulture));
-              TimeSpan duration = TimeSpan.ParseExact(match.Groups[4].Value, @"hh\:mm\:ss\.ff", CultureInfo.InvariantCulture);
-              UInt64 size = FormattedSize.ToUInt64(match.Groups[5].Value);
-              UInt32 bitRate = FormattedSize.ToUInt32(match.Groups[6].Value);
-              string encoding = match.Groups[7].Value;
+              UInt16 channels = Convert.ToUInt16(double.Parse(matchInfo.Groups[1].Value, CultureInfo.InvariantCulture));
+              UInt32 sampleRate = Convert.ToUInt32(double.Parse(matchInfo.Groups[2].Value, CultureInfo.InvariantCulture));
+              UInt16 sampleSize = Convert.ToUInt16(double.Parse(new string(matchInfo.Groups[3].Value.Where(Char.IsDigit).ToArray()), CultureInfo.InvariantCulture));
+              TimeSpan duration = TimeSpan.ParseExact(matchInfo.Groups[4].Value, @"hh\:mm\:ss\.ff", CultureInfo.InvariantCulture);
+              UInt64 size = FormattedSize.ToUInt64(matchInfo.Groups[5].Value);
+              UInt32 bitRate = FormattedSize.ToUInt32(matchInfo.Groups[6].Value);
+              string encoding = matchInfo.Groups[7].Value;
 
               return new FileInfo(channels, sampleRate, sampleSize, duration, size, bitRate, encoding);
             }
@@ -137,12 +137,21 @@ namespace SoxSharp
             }
           }
 
-          if (CheckForLogMessage(result))
+          if (CheckForLogMessage(output))
             return null;
         }
 
         throw new SoxException("Unexpected output from SoX");
       }
+
+			finally
+			{
+				if (soxProcess_ != null)
+				{
+					soxProcess_.Dispose();
+					soxProcess_ = null;
+				}
+			}
     }
 
 
@@ -154,8 +163,7 @@ namespace SoxSharp
     /// <param name="outputFile">Output file.</param>
     public int Process(string inputFile, string outputFile)
     {
-      //Process soxCmd = CreateSoxProcess();
-      soxProcess_ = CreateSoxProcess();
+      soxProcess_ = SoxProcess.Create(Path);
 
       try
       {       
@@ -165,7 +173,7 @@ namespace SoxSharp
           {
             if (OnProgress != null)
             {
-              Match matchProgress = RegexProgress.Match(received.Data);
+              Match matchProgress = soxProcess_.Regex.Progress.Match(received.Data);
 
               if (matchProgress.Success)
               {
@@ -253,7 +261,7 @@ namespace SoxSharp
     /// </summary>
     public void Abort()
     {
-      if (soxProcess_ != null)
+      if ((soxProcess_ != null) && (soxProcess_.Id != -1))
       {
         try
         {
@@ -268,94 +276,17 @@ namespace SoxSharp
       }
     }
 
-    /// <summary>
-    /// Create a new <see cref="System.Diagnostics.Process"/> instance prepared to run SoX.
-    /// </summary>
-    /// <returns>The SoX process instance.</returns>
-    protected Process CreateSoxProcess()
-    {
-      string soxExecutable;
-
-      if ((Environment.OSVersion.Platform == PlatformID.MacOSX) ||
-          (Environment.OSVersion.Platform == PlatformID.Unix))
-      {
-        if (String.IsNullOrEmpty(BinaryPath))
-          throw new SoxException("SoX path not specified");
-
-        if (File.Exists(BinaryPath))
-          soxExecutable = BinaryPath;
-        else
-          throw new FileNotFoundException("SoX executable not found");
-      }
-
-      else
-      {
-        if (String.IsNullOrEmpty(BinaryPath))
-        {
-          // The SoX executable is directly extracted from the library resources
-          // and only if it was not previously extracted (file MD5 hash check is
-          // performed to ensure it is the expected one).
-
-          try
-          {
-            soxExecutable = Path.Combine(Path.GetTempPath(), "sox.exe");
-
-            if (!File.Exists(soxExecutable))
-              File.WriteAllBytes(soxExecutable, SoxSharp.Resources.sox);
-            else
-            {
-              using (MD5 md5 = MD5.Create())
-              {
-                using (FileStream stream = File.OpenRead(soxExecutable))
-                {
-                  byte[] hash = md5.ComputeHash(stream);
-
-                  if (!SoxHash.SequenceEqual(hash))
-                    File.WriteAllBytes(soxExecutable, SoxSharp.Resources.sox);
-                }
-              }
-            }
-          }
-
-          catch (Exception ex)
-          {
-            throw new SoxException("Cannot extract SoX executable", ex);
-          }
-        }
-        else
-        {
-          if (File.Exists(BinaryPath))
-            soxExecutable = BinaryPath;
-          else
-            throw new FileNotFoundException("SoX executable not found");
-        }
-      }
-
-      Process soxProc = new Process();
-
-      soxProc.StartInfo.FileName = soxExecutable;
-      soxProc.StartInfo.ErrorDialog = false;
-      soxProc.StartInfo.CreateNoWindow = true;
-      soxProc.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-      soxProc.StartInfo.UseShellExecute = false;
-      soxProc.StartInfo.RedirectStandardOutput = true;
-      soxProc.StartInfo.RedirectStandardError = true;
-      soxProc.EnableRaisingEvents = true;
-
-      return soxProc;
-    }
-
 
     protected bool CheckForLogMessage(string data)
     {
-      Match match = RegexLog.Match(data);
+      Match logMatch = soxProcess_.Regex.Log.Match(data);
 
-      if (match.Success)
+      if (logMatch.Success)
       {
         try
         {
-          string logLevel = match.Groups[1].Value;
-          string message = match.Groups[2].Value;
+          string logLevel = logMatch.Groups[1].Value;
+          string message = logMatch.Groups[2].Value;
 
           if (OnLogMessage != null)
           {
