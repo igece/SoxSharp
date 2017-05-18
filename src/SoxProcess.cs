@@ -96,7 +96,7 @@ namespace SoxSharp
       {
         versionCheck.StartInfo.RedirectStandardOutput = true;
         versionCheck.StartInfo.FileName = soxExecutable;
-        versionCheck.StartInfo.Arguments = "-h";
+        versionCheck.StartInfo.Arguments = "--version";
         versionCheck.Start();
 
         string output = versionCheck.StandardOutput.ReadLine();
@@ -107,7 +107,7 @@ namespace SoxSharp
         Match versionMatch = new Regex(@"\sSoX v(\d{1,2}\.\d{1,2}\.\d{1,2})").Match(output);
 
         if (!versionMatch.Success)
-          throw new SoxException("Cannot obtain SoX version: unable to fetch version info from SoX help");
+          throw new SoxException("Cannot obtain SoX version: unable to fetch info from Sox");
 
         string soxVersion = versionMatch.Groups[1].Value;
         soxRegex = RegexSet.GetRegexSet(soxVersion);
