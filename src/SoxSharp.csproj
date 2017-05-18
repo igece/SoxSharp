@@ -19,9 +19,9 @@
     <PackageLicenseUrl>https://github.com/igece/SoxSharp/blob/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/igece/SoxSharp</PackageProjectUrl>
     <Summary>Library that serves as a wrapper to SoX - the Sound eXchange tool.</Summary>
-    <PackageTags>sox wrapper audio</PackageTags>
+    <PackageTags>sox wrapper audio conversion filters</PackageTags>
     <Title>SoxSharp</Title>
-    <Description>.</Description>
+    <Description>Library that serves as a wrapper to SoX - the Sound eXchange tool.</Description>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
