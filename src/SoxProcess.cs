@@ -5,6 +5,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 
+
 namespace SoxSharp
 {
   sealed class SoxProcess : Process

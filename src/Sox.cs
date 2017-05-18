@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 
 
@@ -99,19 +97,19 @@ namespace SoxSharp
       if (!File.Exists(inputFile))
         throw new FileNotFoundException("File not found: " + inputFile);
 
-			soxProcess_ = SoxProcess.Create(Path);
+      soxProcess_ = SoxProcess.Create(Path);
 
-			try
+      try
       {
         soxProcess_.StartInfo.RedirectStandardOutput = true;
         soxProcess_.StartInfo.Arguments = "--info " + inputFile;
         soxProcess_.Start();
-        
+
         string output = soxProcess_.StandardOutput.ReadToEnd();
 
         if (soxProcess_.WaitForExit(10000) == false)
           throw new TimeoutException("SoX response timeout");
-        
+
         if (output != null)
         {
           Match matchInfo = soxProcess_.Regex.FileInfo.Match(output);
@@ -144,14 +142,14 @@ namespace SoxSharp
         throw new SoxException("Unexpected output from SoX");
       }
 
-			finally
-			{
-				if (soxProcess_ != null)
-				{
-					soxProcess_.Dispose();
-					soxProcess_ = null;
-				}
-			}
+      finally
+      {
+        if (soxProcess_ != null)
+        {
+          soxProcess_.Dispose();
+          soxProcess_ = null;
+        }
+      }
     }
 
 
@@ -166,7 +164,7 @@ namespace SoxSharp
       soxProcess_ = SoxProcess.Create(Path);
 
       try
-      {       
+      {
         soxProcess_.ErrorDataReceived += ((sender, received) =>
         {
           if (received.Data != null)
@@ -196,7 +194,7 @@ namespace SoxSharp
                 catch (Exception ex)
                 {
                   throw new SoxException("Unexpected output from SoX", ex);
-                }                
+                }
               }
             }
 
