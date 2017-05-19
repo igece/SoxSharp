@@ -13,7 +13,7 @@
     <FileAlignment>512</FileAlignment>
     <NuGetPackageImportStamp>f15e87c8</NuGetPackageImportStamp>
     <PackageId>SoxSharp</PackageId>
-    <PackageVersion>1.0</PackageVersion>
+    <PackageVersion>1.1</PackageVersion>
     <Authors>igece.labs</Authors>
     <PackageLicenseUrl>https://github.com/igece/SoxSharp/blob/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/igece/SoxSharp</PackageProjectUrl>
@@ -21,7 +21,8 @@
     <PackageTags>sox wrapper audio conversion filters</PackageTags>
     <Title>SoxSharp</Title>
     <Description>Library that serves as a wrapper to SoX - the Sound eXchange tool.</Description>
-    <ReleaseVersion>1.0</ReleaseVersion>
+    <ReleaseVersion>1.1</ReleaseVersion>
+    <PackOnBuild>true</PackOnBuild>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -42,6 +43,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>..\bin\Release\SoxSharp.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -69,7 +71,6 @@
     <Compile Include="FormattedSize.cs" />
     <Compile Include="Exceptions.cs" />
     <Compile Include="SoxProcess.cs" />
-    <Compile Include="RegexSet.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources.resx">

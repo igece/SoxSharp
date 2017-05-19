@@ -10,10 +10,9 @@ namespace SoxSharp
 {
   sealed class SoxProcess : Process
   {
-    public RegexSet Regex { get; private set; }
-
-    private static readonly byte[] InternalSoxHash = { 0x05, 0xd5, 0x00, 0x8a, 0x50, 0x56, 0xe2, 0x8e, 0x45, 0xad, 0x1e, 0xb7, 0xd7, 0xbe, 0x9f, 0x03 };
-
+    public static readonly Regex InfoRegex = new Regex(@"Input File\s*: .+\r?\nChannels\s*: (\d+)\r?\nSample Rate\s*: (\d+)\r?\nPrecision\s*: ([\s\S]+?)\r?\nDuration\s*: (\d{2}:\d{2}:\d{2}\.?\d{2}?)[\s\S]+?\r?\nFile Size\s*: (\d+\.?\d{0,2}?[k|M|G]?)\r?\nBit Rate\s*: (\d+\.?\d{0,2}?[k|M|G]?)\r?\nSample Encoding\s*: (.+)");
+    public static readonly Regex ProgressRegex = new Regex(@"In:(\d{1,3}\.?\d{0,2})%\s+(\d{2}:\d{2}:\d{2}\.?\d{0,2})\s+\[(\d{2}:\d{2}:\d{2}\.?\d{0,2})\]\s+Out:(\d+\.?\d{0,2}[k|M|G]?)");
+    public static readonly Regex LogRegex = new Regex(@"(FAIL|WARN)\s(.+)");
 
     private SoxProcess()
     : base()
@@ -36,63 +35,14 @@ namespace SoxSharp
     {
       string soxExecutable;
 
-      if ((Environment.OSVersion.Platform == PlatformID.MacOSX) ||
-          (Environment.OSVersion.Platform == PlatformID.Unix))
-      {
-        if (String.IsNullOrEmpty(path))
-          throw new SoxException("SoX path not specified");
+      if (String.IsNullOrEmpty(path))
+        throw new SoxException("SoX path not specified");
 
-        if (File.Exists(path))
-          soxExecutable = path;
-        else
-          throw new FileNotFoundException("SoX executable not found");
-      }
-
+      if (File.Exists(path))
+        soxExecutable = path;
       else
-      {
-        if (String.IsNullOrEmpty(path))
-        {
-          // The SoX executable is directly extracted from the library resources
-          // and only if it was not previously extracted (file MD5 hash check is
-          // performed to ensure it is the expected one).
-
-          try
-          {
-            soxExecutable = Path.Combine(Path.GetTempPath(), "sox.exe");
-
-            if (!File.Exists(soxExecutable))
-              File.WriteAllBytes(soxExecutable, SoxSharp.Resources.sox);
-            else
-            {
-              using (MD5 md5 = MD5.Create())
-              {
-                using (FileStream stream = File.OpenRead(soxExecutable))
-                {
-                  byte[] hash = md5.ComputeHash(stream);
-
-                  if (!InternalSoxHash.SequenceEqual(hash))
-                    File.WriteAllBytes(soxExecutable, SoxSharp.Resources.sox);
-                }
-              }
-            }
-          }
-
-          catch (Exception ex)
-          {
-            throw new SoxException("Cannot extract SoX executable", ex);
-          }
-        }
-        else
-        {
-          if (File.Exists(path))
-            soxExecutable = path;
-          else
-            throw new FileNotFoundException("SoX executable not found");
-        }
-      }
-
-      RegexSet soxRegex = null;
-
+        throw new FileNotFoundException("SoX executable not found");
+      
       using (SoxProcess versionCheck = new SoxProcess())
       {
         versionCheck.StartInfo.RedirectStandardOutput = true;
@@ -105,21 +55,31 @@ namespace SoxSharp
         if (versionCheck.WaitForExit(1000) == false)
           throw new TimeoutException("Cannot obtain SoX version: response timeout");
 
-        Match versionMatch = new Regex(@"\sSoX v(\d{1,2}\.\d{1,2}\.\d{1,2})").Match(output);
+        Match versionMatch = new Regex(@"\sSoX v(\d{1,2})\.(\d{1,2})\.(\d{1,2})").Match(output);
 
         if (!versionMatch.Success)
           throw new SoxException("Cannot obtain SoX version: unable to fetch info from Sox");
 
-        string soxVersion = versionMatch.Groups[1].Value;
-        soxRegex = RegexSet.GetRegexSet(soxVersion);
+        try
+        {
+          int majorVersion = Int32.Parse(versionMatch.Groups[1].Value);
+          int minorVersion = Int32.Parse(versionMatch.Groups[2].Value);
+          int fixVersion = Int32.Parse(versionMatch.Groups[3].Value);
 
-        if (soxRegex == null)
-          throw new SoxException("SoX version " + soxVersion + " not currently supported");
+          if ((majorVersion < 14) ||
+              ((majorVersion == 14) && (minorVersion < 3)) ||
+              ((majorVersion == 14) && (minorVersion == 3) && (fixVersion < 1)))
+            throw new SoxException(versionMatch.Groups[0] + " not currently supported");
+        }
+
+        catch (Exception ex)
+        {
+          throw new SoxException("Cannot obtain SoX version", ex);
+        }
       }
 
       SoxProcess soxProc = new SoxProcess();
       soxProc.StartInfo.FileName = soxExecutable;
-      soxProc.Regex = soxRegex;
 
       return soxProc;
     }

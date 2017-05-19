@@ -24,11 +24,9 @@ namespace SoxSharp
     public event EventHandler<LogMessageEventArgs> OnLogMessage = null;
 
     /// <summary>
-    /// Location of the SoX binary to be used by the library. If no path is specified (null or empty string) AND
-    /// only on Windows platforms SoxSharp will use a binary copy included within the library (version 14.4.2).
-    /// On MacOSX and Linux systems, this property must be correctly set before any call to the <see cref="Process"/> method.
+    /// Location of the SoX executable to be used by the library.
     /// </summary>
-    /// <value>The binary path.</value>
+    /// <value>The executable path.</value>
     public string Path { get; set; }
 
     /// <summary>
@@ -55,17 +53,11 @@ namespace SoxSharp
     private bool disposed_ = false;
 
 
-    /// <summary>
-    /// Initializes a new instance of the <see cref="T:SoxSharp.Sox"/> class.
-    /// </summary>
-    public Sox()
-    {
-      Input = new InputFormatOptions();
-      Output = new OutputFormatOptions();
-    }
-
-
-    public Sox(string path)
+		/// <summary>
+		/// Initializes a new instance of the <see cref="T:SoxSharp.Sox"/> class.
+		/// </summary>
+		/// <param name="path">Location of the SoX executable to be used by the library.</param>
+		public Sox(string path)
     {
       Input = new InputFormatOptions();
       Output = new OutputFormatOptions();
@@ -112,7 +104,7 @@ namespace SoxSharp
 
         if (output != null)
         {
-          Match matchInfo = soxProcess_.Regex.FileInfo.Match(output);
+          Match matchInfo = SoxProcess.InfoRegex.Match(output);
 
           if (matchInfo.Success)
           {
@@ -171,7 +163,7 @@ namespace SoxSharp
           {
             if (OnProgress != null)
             {
-              Match matchProgress = soxProcess_.Regex.Progress.Match(received.Data);
+              Match matchProgress = SoxProcess.ProgressRegex.Match(received.Data);
 
               if (matchProgress.Success)
               {
@@ -277,7 +269,7 @@ namespace SoxSharp
 
     protected bool CheckForLogMessage(string data)
     {
-      Match logMatch = soxProcess_.Regex.Log.Match(data);
+      Match logMatch = SoxProcess.LogRegex.Match(data);
 
       if (logMatch.Success)
       {
