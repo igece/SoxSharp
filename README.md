@@ -1,8 +1,7 @@
 ## SoxSharp
 
 SoxSharp is a C# library that serves as a wrapper to [SoX - the Sound eXchange tool](http://sox.sourceforge.net/).
-
-It comes bundled with the SoX 14.4.2 Win32 executable, so if you're on a Windows platform, you don't need any additional prerequisites to start using it. On other platforms (MacOSX and Linux) you will need to pass to the **Sox** class constructor or set the **Sox.Path** property to the location where SoX is stored.
+SoX is a cross-platform (Windows, Linux, MacOS X, etc.) command line utility that can convert various formats of computer audio files in to other formats. It can also apply various effects to these sound files and play and record audio files on most platforms.
 
 
 ### How it works
@@ -12,14 +11,16 @@ It comes bundled with the SoX 14.4.2 Win32 executable, so if you're on a Windows
 Usage is pretty straightforward:
 
 ```cs
-using (Sox sox = new Sox())
+using (Sox sox = new Sox("sox.exe"))
 {
   FileInfo wavInfo = sox.GetInfo("test.wav");
   Console.WriteLine(wavInfo);
 }
 ```
 
-This is the same as executing `sox --info test.wav`. SoxSharp parses the SoX  output and fills a **FileInfo** instance with the retrieved information.
+This is the same as executing `sox --info test.wav`. SoxSharp parses the SoX output and fills a **FileInfo** instance with the retrieved information.
+
+When instantiating the **Sox** class, we pass to the constructor the location of the SoX executable to be used.
 
 
 #### File conversions
@@ -27,7 +28,7 @@ This is the same as executing `sox --info test.wav`. SoxSharp parses the SoX  ou
 The simplest way to perform an audio conversion is to just call the **Process** method with both input and output files:
 
 ```cs
-using (Sox sox = new Sox())
+using (Sox sox = new Sox("sox.exe"))
 {
   sox.Process("test.wav", "test.mp3");
 }
@@ -38,7 +39,7 @@ The previous code will launch SoX with 'test.wav' as input file and 'test.mp3' a
 To force the output to be encoded with MP3 format (instead of letting SoX to guess it from the output file extension) and use a sample rate of 32 KHz:
 
 ```cs
-using (Sox sox = new Sox())
+using (Sox sox = new Sox("sox.exe"))
 {
   sox.Output.Type = FileType.MP3;
   sox.Output.SampleRate = 32000;
