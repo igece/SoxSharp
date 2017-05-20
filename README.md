@@ -20,7 +20,7 @@ using (Sox sox = new Sox("sox.exe"))
 
 This is the same as executing `sox --info test.wav`. SoxSharp parses the SoX output and fills a **FileInfo** instance with the retrieved information.
 
-When instantiating the **Sox** class, we pass to the constructor the location of the SoX executable to be used.
+When instantiating the **Sox** class, we pass to the constructor the location of the SoX executable to be used. Please note that, when SoX is executed, the directory where it is located will be used as the working directory, so any relative path included in both input and output files shall be relative to this directory.
 
 
 #### File conversions
