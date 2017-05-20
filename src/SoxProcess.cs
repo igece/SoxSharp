@@ -14,6 +14,7 @@ namespace SoxSharp
     public static readonly Regex ProgressRegex = new Regex(@"In:(\d{1,3}\.?\d{0,2})%\s+(\d{2}:\d{2}:\d{2}\.?\d{0,2})\s+\[(\d{2}:\d{2}:\d{2}\.?\d{0,2})\]\s+Out:(\d+\.?\d{0,2}[k|M|G]?)");
     public static readonly Regex LogRegex = new Regex(@"(FAIL|WARN)\s(.+)");
 
+
     private SoxProcess()
     : base()
     {
@@ -80,6 +81,7 @@ namespace SoxSharp
 
       SoxProcess soxProc = new SoxProcess();
       soxProc.StartInfo.FileName = soxExecutable;
+      soxProc.StartInfo.WorkingDirectory = Path.GetDirectoryName(soxExecutable);
 
       return soxProc;
     }
