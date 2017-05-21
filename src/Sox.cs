@@ -49,6 +49,12 @@ namespace SoxSharp
     /// </summary>
     public OutputFormatOptions Output { get; protected set; }
 
+    /// <summary>
+    /// Custom global arguments.
+    /// </summary>
+    public string CustomArgs { get; set; } 
+
+
     private SoxProcess soxProcess_ = null;
     private bool disposed_ = false;
 
@@ -204,6 +210,9 @@ namespace SoxSharp
 
         if (Multithreaded.HasValue)
           args.Add(Multithreaded.Value ? "--multi-threaded" : "--single-threaded");
+
+        if (!String.IsNullOrEmpty(CustomArgs))
+          args.Add(CustomArgs);
 
         args.Add("--show-progress");
 
