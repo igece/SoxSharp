@@ -54,6 +54,10 @@ namespace SoxSharp
     /// </summary>
     public bool? Glob { get; set; }
 
+    /// <summary>
+    /// Custom format arguments.
+    /// </summary>
+    public string CustomArgs { get; set; }
 
     /// <summary>
     /// Default constructor.
@@ -114,6 +118,9 @@ namespace SoxSharp
 
       if (Glob.HasValue && (Glob.Value == false))
         formatOptions.Append(" --no-glob");
+
+      if (!String.IsNullOrEmpty(CustomArgs))
+        formatOptions.Append(" " + CustomArgs);
 
       return formatOptions.ToString();
     }
