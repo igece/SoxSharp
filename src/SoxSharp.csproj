@@ -71,6 +71,8 @@
     <Compile Include="FormattedSize.cs" />
     <Compile Include="Exceptions.cs" />
     <Compile Include="SoxProcess.cs" />
+    <Compile Include="Effects\IBaseEffect.cs" />
+    <Compile Include="Effects\BaseFilter.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources.resx">
@@ -80,6 +82,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Effects\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
