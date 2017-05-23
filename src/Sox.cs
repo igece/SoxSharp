@@ -1,4 +1,4 @@
-﻿using System;
+﻿﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -137,7 +137,7 @@ namespace SoxSharp
 
             catch (Exception ex)
             {
-              throw new SoxException("Unexpected output from SoX", ex);
+              throw new SoxException("Cannot parse SoX output", ex);
             }
           }
 
@@ -194,6 +194,13 @@ namespace SoxSharp
                   if (eventArgs.Abort)
                     Abort();
 
+                  return;
+                }
+
+                catch (OverflowException)
+                {
+                  // SoX v14.3.1 (at least) sometimes report invalid time values (i.e. 06:31:60.00).
+                  // Just ignore this progress update.
                   return;
                 }
 
