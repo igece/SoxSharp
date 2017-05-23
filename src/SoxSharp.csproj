@@ -72,7 +72,15 @@
     <Compile Include="Exceptions.cs" />
     <Compile Include="SoxProcess.cs" />
     <Compile Include="Effects\IBaseEffect.cs" />
-    <Compile Include="Effects\BaseFilter.cs" />
+    <Compile Include="Effects\BaseEffect.cs" />
+    <Compile Include="Effects\NoiseProfileEffect.cs" />
+    <Compile Include="Effects\NoiseReductionEffect.cs" />
+    <Compile Include="Effects\HighPassFilterEffect.cs" />
+    <Compile Include="Effects\Types\Width.cs" />
+    <Compile Include="Effects\Types\FilterType.cs" />
+    <Compile Include="Effects\Types\Frequency.cs" />
+    <Compile Include="Effects\Types\WidthUnits.cs" />
+    <Compile Include="Effects\Types\FrequencyUnits.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources.resx">
@@ -85,6 +93,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Effects\" />
+    <Folder Include="Effects\Types\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
