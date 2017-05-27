@@ -81,6 +81,9 @@
     <Compile Include="Effects\Types\Frequency.cs" />
     <Compile Include="Effects\Types\WidthUnits.cs" />
     <Compile Include="Effects\Types\FrequencyUnits.cs" />
+    <Compile Include="Effects\TrimEffect.cs" />
+    <Compile Include="Effects\Types\Position.cs" />
+    <Compile Include="Effects\Types\PositionFrom.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources.resx">
