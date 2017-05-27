@@ -1,53 +1,56 @@
 ﻿using System.Text;
+using System;
 
 
 namespace SoxSharp.Effects.Types
 {
   public struct Frequency
   {
-    public double Value;
+    private double value_;
+
+    private FrequencyUnits? units_;
 
 
-    public FrequencyUnits Units;
-
-
-		public Frequency(double frequency)
-		{
-			Value = frequency;
-      Units = FrequencyUnits.Hz;
-		}
-
-
-    public Frequency(double frequency, FrequencyUnits units)
+    public Frequency(double value)
     {
-      Value = frequency;
-      Units = units;
+      value_ = value;
+      units_ = null;
     }
 
 
-    public static implicit operator Frequency(double frequency)
+    public Frequency(double value, FrequencyUnits units)
     {
-      return new Frequency(frequency);
+      value_ = value;
+      units_ = units;
     }
 
 
-		public override string ToString()
-		{
+    public static implicit operator Frequency(double value)
+    {
+      return new Frequency(value);
+    }
+
+
+    public override string ToString()
+    {
       StringBuilder freqStr = new StringBuilder();
-			freqStr.Append(Value);
+      freqStr.Append(value_);
 
-			switch (Units)
-			{
-        case FrequencyUnits.Hz:
-					freqStr.Append("h");
-					break;
+      if (units_.HasValue)
+      {
+        switch (units_.Value)
+        {
+          case FrequencyUnits.Hz:
+            freqStr.Append("h");
+            break;
 
-        case FrequencyUnits.KHz:
-					freqStr.Append("k");
-					break;
-			}
+          case FrequencyUnits.KHz:
+            freqStr.Append("k");
+            break;
+        }
+      }
 
-			return freqStr.ToString();
-		}
+      return freqStr.ToString();
+    }
   }
 }

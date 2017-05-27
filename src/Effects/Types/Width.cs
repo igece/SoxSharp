@@ -1,47 +1,64 @@
 ﻿using System.Text;
+using System.Globalization;
 
 
 namespace SoxSharp.Effects.Types
 {
   public struct Width
   {
-    public double Value;
+    private double value_;
 
-    public WidthUnits Units;
+    private WidthUnits? units_;
 
 
-    public Width(double width, WidthUnits units)
+    public Width(double value)
     {
-      Value = width;
-      Units = units;
+      value_ = value;
+      units_ = null;
     }
 
 
-		public override string ToString()
-		{
-			StringBuilder effectArgs = new StringBuilder();
-			effectArgs.Append(Value);
+    public Width(double value, WidthUnits units)
+    {
+      value_ = value;
+      units_ = units;
+    }
 
-      switch (Units)
+
+    public static implicit operator Width(double value)
+    {
+      return new Width(value);
+    }
+
+
+    public override string ToString()
+    {
+      StringBuilder effectArgs = new StringBuilder();
+      effectArgs.Append(value_.ToString(CultureInfo.InvariantCulture));
+
+      if (units_.HasValue)
       {
-        case WidthUnits.Hz:
-          effectArgs.Append("h");
-          break;
+        switch (units_.Value)
+        {
+          case WidthUnits.Hz:
+            effectArgs.Append("h");
+            break;
 
-        case WidthUnits.KHz:
-          effectArgs.Append("k");
-          break;
+          case WidthUnits.KHz:
+            effectArgs.Append("k");
+            break;
 
-        case WidthUnits.Octaves:
-          effectArgs.Append("o");
-          break;
+          case WidthUnits.Octaves:
+            effectArgs.Append("o");
+            break;
 
-        case WidthUnits.Qfactor:
-          effectArgs.Append("q");
-          break;
+          case WidthUnits.Qfactor:
+            effectArgs.Append("q");
+            break;
+        }
       }
 
-			return effectArgs.ToString();
-		}
+      return effectArgs.ToString();
+    }
   }
 }
