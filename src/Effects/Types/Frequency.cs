@@ -1,14 +1,13 @@
 ﻿using System.Text;
-using System;
 
 
 namespace SoxSharp.Effects.Types
 {
   public struct Frequency
   {
-    private double value_;
+    private readonly double value_;
 
-    private FrequencyUnits? units_;
+    private readonly FrequencyUnits? units_;
 
 
     public Frequency(double value)

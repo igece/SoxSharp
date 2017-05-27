@@ -6,9 +6,9 @@ namespace SoxSharp.Effects.Types
 {
   public struct Width
   {
-    private double value_;
+    private readonly double value_;
 
-    private WidthUnits? units_;
+    private readonly WidthUnits? units_;
 
 
     public Width(double value)
