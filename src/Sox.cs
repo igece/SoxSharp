@@ -43,18 +43,18 @@ namespace SoxSharp
     /// <summary>
     /// Input format options.
     /// </summary>
-    public InputFormatOptions Input { get; protected set; }
+    public InputFormatOptions Input { get; private set; }
 
     /// <summary>
     /// Output format options.
     /// </summary>
-    public OutputFormatOptions Output { get; protected set; }
+    public OutputFormatOptions Output { get; private set; }
 
     /// <summary>
     /// Filters to be applied.
     /// </summary>
     /// <value>The filters.</value>
-    public List<IBaseEffect> Effects { get; protected set; }
+    public List<IBaseEffect> Effects { get; private set; }
 
     /// <summary>
     /// Custom global arguments.
@@ -112,6 +112,16 @@ namespace SoxSharp
         soxProcess_.Start();
 
         string output = soxProcess_.StandardOutput.ReadToEnd();
+
+        if (String.IsNullOrEmpty(output))
+        {
+          output = soxProcess_.StandardError.ReadToEnd();
+
+          if (!CheckForLogMessage(output))
+            throw new SoxException("Unexpected output from SoX");
+          
+          return null;
+        }
 
         if (soxProcess_.WaitForExit(10000) == false)
           throw new TimeoutException("SoX response timeout");
@@ -253,8 +263,8 @@ namespace SoxSharp
 
           if (soxProcess_ != null)
             return soxProcess_.ExitCode;
-          else
-            return -1;
+          
+          return -1;
         }
 
         catch (Exception ex)
@@ -325,6 +335,7 @@ namespace SoxSharp
 
       return false;
     }
+
 
     private void Dispose(bool disposing)
     {
