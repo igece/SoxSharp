@@ -2,14 +2,7 @@
 {
   public abstract class BaseEffect : IBaseEffect
   {
-    public string Name { get; }
-
-
-    public BaseEffect(string name)
-    {
-      Name = name;
-    }
-
+    public abstract string Name { get; }
 
     public abstract override string ToString();
   }

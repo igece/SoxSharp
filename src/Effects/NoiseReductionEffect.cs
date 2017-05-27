@@ -1,31 +1,40 @@
 ﻿using System.Text;
+using System.Globalization;
 
 
 namespace SoxSharp.Effects
 {
   public class NoiseReductionEffect : BaseEffect
   {
+    public override string Name { get { return "noisered"; } }
+
     public string File { get; set; }
 
-    public double Amount { get; set; }
+    public double? Amount { get; set; }
 
 
-    /// <summary>
-    /// Initializes a new instance of the <see cref="T:SoxSharp.Effects.NoiseReductionEffect"/> class.
-    /// </summary>
-    public NoiseReductionEffect()
-    : base("Noise Reduction")
+    public NoiseReductionEffect(string profile)
     {
+      File = profile;
+    }
+
+
+    public NoiseReductionEffect(string profile, double amount)
+    : this(profile)
+    {
+      Amount = amount;
     }
 
 
     public override string ToString()
     {
-      StringBuilder effectArgs = new StringBuilder("noisered");
-			effectArgs.Append(" " + File);
-      effectArgs.Append(" " + Amount);
+      StringBuilder effectArgs = new StringBuilder(Name);
+      effectArgs.Append(" " + File);
 
-			return effectArgs.ToString();
+      if (Amount.HasValue)
+        effectArgs.Append(" " + Amount.Value.ToString(CultureInfo.InvariantCulture));
+
+      return effectArgs.ToString();
     }
   }
 }
