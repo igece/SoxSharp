@@ -87,15 +87,6 @@ namespace SoxSharp.Effects.Types
     }
 
 
-    public static string Concatenate(List<Position> positions)
-    {
-      StringBuilder allPos = new StringBuilder();
-      positions.ForEach((position) => allPos.Append(position));
-
-      return allPos.ToString();
-    }
-
-
     public override string ToString()
     {
       StringBuilder args = new StringBuilder();
