@@ -24,17 +24,12 @@ namespace SoxSharp.Effects
     }
 
 
-    public HighPassFilterEffect(double frequency, FilterType type)
+    /// <summary>
+		/// Initializes a new instance of the <see cref="T:SoxSharp.Effects.NoiseReductionEffect"/> class.
+		/// </summary>
+    public HighPassFilterEffect(double frequency, double width)
     : this(frequency)
     {
-      Type = type;
-    }
-
-
-    public HighPassFilterEffect(double frequency, Width width)
-    : this(frequency)
-    {
-      Type = FilterType.DoublePole;
       Width = width;
     }
 
@@ -45,17 +40,9 @@ namespace SoxSharp.Effects
     }
 
 
-    public HighPassFilterEffect(Frequency frequency, FilterType type)
-    : this(frequency)
-    {
-      Type = type;
-    }
-
-
     public HighPassFilterEffect(Frequency frequency, Width width)
     : this(frequency)
     {
-      Type = FilterType.DoublePole;
       Width = width;
     }
 
