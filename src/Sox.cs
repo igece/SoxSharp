@@ -60,6 +60,11 @@ namespace SoxSharp
     /// </summary>
     public string CustomArgs { get; set; }
 
+    /// <summary>
+    /// Custom effects. Add here the command line arguments for any effect not currently implemented in SoXSharp.
+    /// </summary>
+    public string CustomEffects { get; set; }
+
 
     private SoxProcess soxProcess_ = null;
     private bool disposed_ = false;
@@ -241,6 +246,9 @@ namespace SoxSharp
         // Effects.
         foreach (IBaseEffect effect in Effects)
           args.Add(effect.ToString());
+
+        // Custom effects.
+        args.Add(CustomEffects);
 
         soxProcess_.StartInfo.Arguments = String.Join(" ", args);
 
