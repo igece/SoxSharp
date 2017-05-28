@@ -15,7 +15,7 @@ namespace SoxSharp
   public class Sox : IDisposable
   {
     /// <summary>
-    /// Provides updated progress status while <see cref="Sox.Process"/> is being executed.
+    /// Provides updated progress status while <see cref="T:Sox.Process"/> is being executed.
     /// </summary>
     public event EventHandler<ProgressEventArgs> OnProgress = null;
 
@@ -162,6 +162,16 @@ namespace SoxSharp
       }
     }
 
+    /// <summary>
+    /// Spawns a new SoX process using the specified options in this instance.
+    /// </summary>
+    /// <returns>Exit code returned by SoX.</returns>
+    /// <param name="inputFile">Audio file to be processed.</param>
+    public int Process(string inputFile)
+    {
+      return Process(inputFile, null);
+    }
+
 
     /// <summary>
     /// Spawns a new SoX process using the specified options in this instance.
@@ -237,11 +247,21 @@ namespace SoxSharp
 
         // Input options.
         args.Add(Input.ToString());
+
+        if (inputFile != null)
+          args.Add(inputFile);
+        else
+          args.Add("--null");
+
         args.Add(inputFile);
 
         // Output options.
         args.Add(Output.ToString());
-        args.Add(outputFile);
+
+        if (outputFile != null)
+          args.Add(outputFile);
+        else
+          args.Add("--null");
 
         // Effects.
         foreach (IBaseEffect effect in Effects)
