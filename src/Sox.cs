@@ -32,7 +32,7 @@ namespace SoxSharp
     /// <summary>
     /// Size of all processing buffers (default is 8192).
     /// </summary>
-    public UInt16? Buffer { get; set; }
+    public uint? Buffer { get; set; }
 
     /// <summary>
     /// Enable parallel effects channels processing (where available).
