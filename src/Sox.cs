@@ -51,9 +51,8 @@ namespace SoxSharp
     public OutputFormatOptions Output { get; private set; }
 
     /// <summary>
-    /// Filters to be applied.
+    /// Effects to be applied.
     /// </summary>
-    /// <value>The filters.</value>
     public List<IBaseEffect> Effects { get; private set; }
 
     /// <summary>
