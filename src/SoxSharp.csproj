@@ -86,6 +86,7 @@
     <Compile Include="Effects\Types\PositionFrom.cs" />
     <Compile Include="Effects\VolumeEffect.cs" />
     <Compile Include="Effects\Types\GainType.cs" />
+    <Compile Include="Effects\AllPassEffect.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources.resx">
