@@ -4,6 +4,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using SoxSharp.Effects;
 
 
 namespace SoxSharp
@@ -42,12 +43,18 @@ namespace SoxSharp
     /// <summary>
     /// Input format options.
     /// </summary>
-    public InputFormatOptions Input { get; protected set; }
+    public InputFormatOptions Input { get; private set; }
 
     /// <summary>
     /// Output format options.
     /// </summary>
-    public OutputFormatOptions Output { get; protected set; }
+    public OutputFormatOptions Output { get; private set; }
+
+    /// <summary>
+    /// Filters to be applied.
+    /// </summary>
+    /// <value>The filters.</value>
+    public List<IBaseEffect> Effects { get; private set; }
 
     /// <summary>
     /// Custom global arguments.
@@ -67,6 +74,7 @@ namespace SoxSharp
     {
       Input = new InputFormatOptions();
       Output = new OutputFormatOptions();
+      Effects = new List<IBaseEffect>();
       Path = path;
     }
 
@@ -231,6 +239,10 @@ namespace SoxSharp
         args.Add(Output.ToString());
         args.Add(outputFile);
 
+        // Effects.
+        foreach (IBaseEffect effect in Effects)
+          args.Add(effect.ToString());
+
         soxProcess_.StartInfo.Arguments = String.Join(" ", args);
 
         try
@@ -241,8 +253,8 @@ namespace SoxSharp
 
           if (soxProcess_ != null)
             return soxProcess_.ExitCode;
-          else
-            return -1;
+
+          return -1;
         }
 
         catch (Exception ex)
