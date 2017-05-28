@@ -7,46 +7,46 @@ namespace SoxSharp
   /// <summary>
   /// Provides information about an audio file.
   /// </summary>
-  public class FileInfo
+  public struct AudioInfo
   {
     /// <summary>
     /// Number of audio channels.
     /// </summary>
-    public UInt16 Channels { get; protected set; }
+    public readonly UInt16 Channels;
 
     /// <summary>
     /// Audio sample rate.
     /// </summary>
-    public UInt32 SampleRate { get; protected set; }
+    public readonly UInt32 SampleRate;
 
     /// <summary>
     /// Audio sample size (bits).
     /// </summary>
-    public UInt16 SampleSize { get; protected set; }
+    public readonly UInt16 SampleSize;
 
     /// <summary>
     /// Audio time length. 
     /// </summary>
-    public TimeSpan Duration { get; protected set; }
+    public readonly TimeSpan Duration;
 
     /// <summary>
     /// Audio file size.
     /// </summary>
-    public UInt64 Size { get; protected set; }
+    public readonly UInt64 Size;
 
     /// <summary>
     /// Audio bitrate.
     /// </summary>
-    public UInt32 BitRate { get; protected set; }
+    public readonly UInt32 BitRate;
 
     /// <summary>
     /// Audio format.
     /// </summary>
-    public string Format { get; protected set; }
+    public readonly string Format;
 
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="SoxSharp.FileInfo"/> class. 
+    /// Initializes a new instance of the <see cref="SoxSharp.AudioInfo"/> class. 
     /// </summary>
     /// <param name="channels">Number of audio channels.</param>
     /// <param name="sampleRate">Audio sample rate.</param>
@@ -55,7 +55,7 @@ namespace SoxSharp
     /// <param name="size">Audio file size</param>
     /// <param name="bitRate"></param>
     /// <param name="format">Audio format.</param>
-    public FileInfo(UInt16 channels, UInt32 sampleRate, UInt16 sampleSize, TimeSpan duration, UInt64 size, UInt32 bitRate, string format)
+    public AudioInfo(UInt16 channels, UInt32 sampleRate, UInt16 sampleSize, TimeSpan duration, UInt64 size, UInt32 bitRate, string format)
     {
       Channels = channels;
       SampleRate = sampleRate;
@@ -68,9 +68,9 @@ namespace SoxSharp
 
 
     /// <summary>
-    /// Returns information about the <see cref="FileInfo"/> instance (invalidates <see cref="Object.ToString()"/>).
+    /// Returns information about the <see cref="AudioInfo"/> instance (invalidates <see cref="Object.ToString()"/>).
     /// </summary>
-    /// <returns>String containing all <see cref="FileInfo"/> instance properties values.</returns>
+    /// <returns>String containing all <see cref="AudioInfo"/> instance properties values.</returns>
     public override string ToString()
     {
       StringBuilder result = new StringBuilder();

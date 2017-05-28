@@ -1,4 +1,4 @@
-﻿﻿using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -52,18 +52,18 @@ namespace SoxSharp
     /// <summary>
     /// Custom global arguments.
     /// </summary>
-    public string CustomArgs { get; set; } 
+    public string CustomArgs { get; set; }
 
 
     private SoxProcess soxProcess_ = null;
     private bool disposed_ = false;
 
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="T:SoxSharp.Sox"/> class.
-		/// </summary>
-		/// <param name="path">Location of the SoX executable to be used by the library.</param>
-		public Sox(string path)
+    /// <summary>
+    /// Initializes a new instance of the <see cref="T:SoxSharp.Sox"/> class.
+    /// </summary>
+    /// <param name="path">Location of the SoX executable to be used by the library.</param>
+    public Sox(string path)
     {
       Input = new InputFormatOptions();
       Output = new OutputFormatOptions();
@@ -88,9 +88,9 @@ namespace SoxSharp
     /// <summary>
     /// Gets information about the given file. 
     /// </summary>
-    /// <returns>File information as a <see cref="SoxSharp.FileInfo"/> instance.</returns>
+    /// <returns>File information as a <see cref="SoxSharp.AudioInfo"/> instance.</returns>
     /// <param name="inputFile">Input file.</param>
-    public FileInfo GetInfo(string inputFile)
+    public AudioInfo GetInfo(string inputFile)
     {
       if (!File.Exists(inputFile))
         throw new FileNotFoundException("File not found: " + inputFile);
@@ -108,6 +108,9 @@ namespace SoxSharp
         if (soxProcess_.WaitForExit(10000) == false)
           throw new TimeoutException("SoX response timeout");
 
+        CheckForLogMessage(output);
+        CheckExitCode(soxProcess_.ExitCode);
+
         if (output != null)
         {
           Match matchInfo = SoxProcess.InfoRegex.Match(output);
@@ -124,7 +127,7 @@ namespace SoxSharp
               UInt32 bitRate = FormattedSize.ToUInt32(matchInfo.Groups[6].Value);
               string encoding = matchInfo.Groups[7].Value;
 
-              return new FileInfo(channels, sampleRate, sampleSize, duration, size, bitRate, encoding);
+              return new AudioInfo(channels, sampleRate, sampleSize, duration, size, bitRate, encoding);
             }
 
             catch (Exception ex)
@@ -132,9 +135,6 @@ namespace SoxSharp
               throw new SoxException("Cannot parse SoX output", ex);
             }
           }
-
-          if (CheckForLogMessage(output))
-            return null;
         }
 
         throw new SoxException("Unexpected output from SoX");
@@ -285,6 +285,9 @@ namespace SoxSharp
 
     protected bool CheckForLogMessage(string data)
     {
+      if (string.IsNullOrEmpty(data))
+        return false;
+
       Match logMatch = SoxProcess.LogRegex.Match(data);
 
       if (logMatch.Success)
@@ -313,6 +316,20 @@ namespace SoxSharp
 
       return false;
     }
+
+
+    protected void CheckExitCode(int exitCode)
+    {
+      switch (exitCode)
+      {
+        case 1:
+          throw new SoxException("SoX did not recognized some command-line parameters");
+
+        case 2:
+          throw new SoxException("SoX returned an error while processing");
+      }
+    }
+
 
     private void Dispose(bool disposing)
     {
