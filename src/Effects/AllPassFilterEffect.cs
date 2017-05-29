@@ -4,7 +4,11 @@ using SoxSharp.Effects.Types;
 
 namespace SoxSharp.Effects
 {
-  public class AllPassEffect : BaseEffect
+  /// <summary>
+  /// Apply a two-pole all-pass filter with a central frequency and width. An all-pass filter changes the audio’s
+  /// frequency to phase relationship without changing its frequency to amplitude relationship.
+  /// </summary>
+  public class AllPassFilterEffect : BaseEffect
   {
     public override string Name { get { return "allpass"; } }
 
@@ -13,14 +17,14 @@ namespace SoxSharp.Effects
     public Width Width { get; set; }
 
 
-    public AllPassEffect(double frequency, double width)
+    public AllPassFilterEffect(double frequency, double width)
     {
       Frequency = frequency;
       Width = width;
     }
 
 
-    public AllPassEffect(Frequency frequency, Width width)
+    public AllPassFilterEffect(Frequency frequency, Width width)
     {
       Frequency = frequency;
       Width = width;

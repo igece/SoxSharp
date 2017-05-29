@@ -86,7 +86,10 @@
     <Compile Include="Effects\Types\PositionFrom.cs" />
     <Compile Include="Effects\VolumeEffect.cs" />
     <Compile Include="Effects\Types\GainType.cs" />
-    <Compile Include="Effects\AllPassEffect.cs" />
+    <Compile Include="Effects\AllPassFilterEffect.cs" />
+    <Compile Include="Effects\BassEffect.cs" />
+    <Compile Include="Effects\TrebleEffect.cs" />
+    <Compile Include="Effects\LowPassFilterEffect.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources.resx">
