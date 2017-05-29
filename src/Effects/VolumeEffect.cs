@@ -4,14 +4,26 @@ using SoxSharp.Effects.Types;
 
 namespace SoxSharp.Effects
 {
+  /// <summary>
+  /// Apply an amplification or an attenuation to the audio signal.
+  /// </summary>
   public class VolumeEffect : BaseEffect
   {
     public override string Name { get { return "vol"; } }
 
+    /// <summary>
+    /// The amount to change the volume, interpreted according to the given type.
+    /// </summary>
     public double Gain { get; set; }
 
+    /// <summary>
+    /// How to interpret the gain value.
+    /// </summary>
     public GainType? Type { get; set; }
 
+    /// <summary>
+    /// Used only on peaks to prevent clipping. Should be a value much less than 1 (e.g. 0.05 or 0.02).
+    /// </summary>
     public double? Limiter { get; set; }
 
 

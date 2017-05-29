@@ -3,6 +3,12 @@
 
 namespace SoxSharp.Effects
 {
+  /// <summary>
+  /// Calculate a profile of the audio for use in noise reduction and save it to file. This effect is usually run on a
+  /// section of audio (obtained adding a <see cref="T:SoxSharp.Effects.TrimEffect"/> effect to the process chain) that
+  /// ideally would contain silence but in fact contains noise. Such sections are typically found at the beginning or
+  /// the end of a recording.
+  /// </summary>
   public class NoiseProfileEffect : BaseEffect
   {
     public override string Name { get { return "noiseprof"; } }
