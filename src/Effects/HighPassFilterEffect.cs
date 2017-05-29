@@ -4,6 +4,10 @@ using SoxSharp.Effects.Types;
 
 namespace SoxSharp.Effects
 {
+  /// <summary>
+  /// Apply a high-pass filter with 3dB point frequency. The filter can be either single-pole or double-pole
+  /// (the default). The filter roll off at 6dB per pole per octave (20dB per pole per decade).
+  /// </summary>
   public class HighPassFilterEffect : BaseEffect
   {
     public override string Name { get { return "highpass"; } }
@@ -12,6 +16,9 @@ namespace SoxSharp.Effects
 
     public Frequency Frequency { get; set; }
 
+    /// <summary>
+    /// Applies only to double-pole filter; the default is Q = 0.707 and gives a Butterworth response.
+    /// </summary>
     public Width? Width { get; set; }
 
 
