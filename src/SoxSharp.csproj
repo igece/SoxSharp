@@ -90,6 +90,8 @@
     <Compile Include="Effects\BassEffect.cs" />
     <Compile Include="Effects\TrebleEffect.cs" />
     <Compile Include="Effects\LowPassFilterEffect.cs" />
+    <Compile Include="Effects\BandPassFilterEffect.cs" />
+    <Compile Include="Effects\BandRejectFilterEffect.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources.resx">
