@@ -28,7 +28,7 @@ namespace SoxSharp.Effects
 
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="T:SoxSharp.Effects.VolumeEffect"/> class.
+    /// Initializes a new instance of the <see cref="VolumeEffect"/> class.
     /// </summary>
     /// <param name="gain">Volume gain.</param>
     public VolumeEffect(double gain)
@@ -38,7 +38,7 @@ namespace SoxSharp.Effects
 
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="T:SoxSharp.Effects.VolumeEffect"/> class.
+    /// Initializes a new instance of the <see cref="VolumeEffect"/> class.
     /// </summary>
     /// <param name="gain">Volume gain.</param>
     /// <param name="type">How to interpret the gain value.</param>
@@ -50,7 +50,7 @@ namespace SoxSharp.Effects
 
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="T:SoxSharp.Effects.VolumeEffect"/> class.
+    /// Initializes a new instance of the <see cref="VolumeEffect"/> class.
     /// </summary>
     /// <param name="gain">Volume gain.</param>
     /// <param name="type">How to interpret the gain value.</param>
@@ -63,9 +63,10 @@ namespace SoxSharp.Effects
 
 
     /// <summary>
-    /// Translate a <see cref="T:SoxSharp.Effects.VolumeEffect"/> instance to a set of command arguments to be passed to SoX to be applied to the input file (invalidates <see cref="object.ToString()"/>).
+    /// Translate a <see cref="VolumeEffect"/> instance to a set of command arguments to be passed to SoX to be applied
+    /// to the input file (invalidates <see cref="object.ToString()"/>).
     /// </summary>
-    /// <returns>A <see cref="T:System.String"/> containing SoX command arguments to apply a Volume effect.</returns>
+    /// <returns>A <see cref="System.String"/> containing SoX command arguments to apply a Volume effect.</returns>
     public override string ToString()
     {
       StringBuilder effectArgs = new StringBuilder(Name);

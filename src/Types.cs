@@ -105,6 +105,13 @@
     F64,
     F8,
     FAP,
+    /// <summary>
+    /// Xiph.org’s Free Lossless Audio Codec Compressed Audio. Open, patent-free codec designed for compressing music.
+    /// SoX can read native FLAC files (.flac) but not Ogg FLAC files (.ogg).
+    /// SoX can write native FLAC files according to a given or default compression level
+    /// (see <see cref="OutputFormatOptions.Compression"/>). 8 is the default compression level and gives the best
+    /// (but slowest) compression; 0 gives the least (but fastest) compression.
+    /// </summary>
     FLAC,
     FSSD,
     GSM,
@@ -207,7 +214,13 @@
   /// </summary>
   public enum LogLevelType
   {
+    /// <summary>
+    /// Error message.
+    /// </summary>
     Error,
+    /// <summary>
+    /// Warning message.
+    /// </summary>
     Warning
   }
 }
