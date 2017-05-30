@@ -37,6 +37,11 @@ namespace SoxSharp.Effects
     }
 
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="T:SoxSharp.Effects.VolumeEffect"/> class.
+    /// </summary>
+    /// <param name="gain">Volume gain.</param>
+    /// <param name="type">How to interpret the gain value.</param>
     public VolumeEffect(double gain, GainType type)
     : this(gain)
     {
@@ -44,6 +49,12 @@ namespace SoxSharp.Effects
     }
 
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="T:SoxSharp.Effects.VolumeEffect"/> class.
+    /// </summary>
+    /// <param name="gain">Volume gain.</param>
+    /// <param name="type">How to interpret the gain value.</param>
+    /// <param name="limiter">Gain limiter.</param>
     public VolumeEffect(double gain, GainType type, double limiter)
     : this(gain, type)
     {
@@ -74,7 +85,7 @@ namespace SoxSharp.Effects
             effectArgs.Append(" power");
             break;
 
-          case GainType.dB:
+          case GainType.Db:
 
             effectArgs.Append(" dB");
             break;
