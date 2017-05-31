@@ -70,7 +70,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Types.cs" />
     <Compile Include="FormattedSize.cs" />
-    <Compile Include="Exceptions.cs" />
     <Compile Include="SoxProcess.cs" />
     <Compile Include="Effects\IBaseEffect.cs" />
     <Compile Include="Effects\BaseEffect.cs" />
@@ -94,6 +93,9 @@
     <Compile Include="Effects\BandPassFilterEffect.cs" />
     <Compile Include="Effects\BandRejectFilterEffect.cs" />
     <Compile Include="Effects\ContrastEffect.cs" />
+    <Compile Include="Effects\LoudnessEffect.cs" />
+    <Compile Include="Exceptions\SoxException.cs" />
+    <Compile Include="Exceptions\SoxEffectException.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources.resx">
@@ -104,6 +106,7 @@
   <ItemGroup>
     <Folder Include="Effects\" />
     <Folder Include="Effects\Types\" />
+    <Folder Include="Exceptions\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
