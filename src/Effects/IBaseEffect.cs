@@ -4,8 +4,6 @@
   {
     string Name { get; }
 
-    bool IsValid();
-
     string ToString();
   }
 }
