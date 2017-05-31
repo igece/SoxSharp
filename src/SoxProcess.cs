@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 using System.Text.RegularExpressions;
-
+using SoxSharp.Exceptions;
 
 namespace SoxSharp
 {
@@ -41,7 +41,7 @@ namespace SoxSharp
         soxExecutable = path;
       else
         throw new FileNotFoundException("SoX executable not found");
-      
+
       using (SoxProcess versionCheck = new SoxProcess())
       {
         versionCheck.StartInfo.RedirectStandardOutput = true;

@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using SoxSharp.Effects;
-
+using SoxSharp.Exceptions;
 
 namespace SoxSharp
 {

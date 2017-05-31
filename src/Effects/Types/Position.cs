@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text;
 using System.Collections.Generic;
-
+using SoxSharp.Exceptions;
 
 namespace SoxSharp.Effects.Types
 {
@@ -89,6 +89,9 @@ namespace SoxSharp.Effects.Types
 
     public override string ToString()
     {
+      if (!time_.HasValue && !samples_.HasValue)
+        throw new SoxEffectException("Invalid Position state (neither time nor samples values)");
+
       StringBuilder args = new StringBuilder();
 
       if (from_.HasValue)
@@ -113,8 +116,6 @@ namespace SoxSharp.Effects.Types
         args.Append(time_.Value.ToString(@"hh\:mm\:ss\.ff"));
       else if (samples_.HasValue)
         args.Append(samples_.Value).Append("s");
-      else
-        throw new SoxException("Invalid Position state (neither time nor samples values)");
 
       return args.ToString();
     }
