@@ -89,9 +89,6 @@ namespace SoxSharp.Effects.Types
 
     public override string ToString()
     {
-      if (!time_.HasValue && !samples_.HasValue)
-        throw new SoxEffectException("Invalid Position state (neither time nor samples values)");
-
       StringBuilder args = new StringBuilder();
 
       if (from_.HasValue)
