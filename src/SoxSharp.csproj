@@ -96,6 +96,9 @@
     <Compile Include="Effects\LoudnessEffect.cs" />
     <Compile Include="Exceptions\SoxException.cs" />
     <Compile Include="Exceptions\SoxEffectException.cs" />
+    <Compile Include="Effects\ReverseEffect.cs" />
+    <Compile Include="Effects\SpeedEffect.cs" />
+    <Compile Include="Effects\TremoloEffect.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources.resx">
