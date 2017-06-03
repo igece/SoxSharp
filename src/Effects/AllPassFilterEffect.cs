@@ -38,6 +38,11 @@ namespace SoxSharp.Effects
     }
 
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="T:SoxSharp.Effects.AllPassFilterEfect"/> class.
+    /// </summary>
+    /// <param name="frequency">Central frequency.</param>
+    /// <param name="width">Filter width.</param>
     public AllPassFilterEffect(Frequency frequency, Width width)
     {
       Frequency = frequency;
