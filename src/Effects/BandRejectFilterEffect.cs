@@ -10,13 +10,27 @@ namespace SoxSharp.Effects
   /// </summary>
   public class BandRejectFilterEffect : BaseEffect
   {
+    /// <summary>
+    /// SoX effect name.
+    /// </summary>
     public override string Name { get { return "bandreject"; } }
 
+    /// <summary>
+    /// Central frequency.
+    /// </summary>
     public Frequency Frequency { get; set; }
 
+    /// <summary>
+    /// Filter width.
+    /// </summary>
     public Width Width { get; set; }
 
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="T:SoxSharp.Effects.BandRejectFilterEffect"/> class.
+    /// </summary>
+    /// <param name="frequency">Central frequency.</param>
+    /// <param name="width">Filter width.</param>
     public BandRejectFilterEffect(double frequency, double width)
     {
       Frequency = frequency;
@@ -24,6 +38,11 @@ namespace SoxSharp.Effects
     }
 
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="T:SoxSharp.Effects.BandRejectFilterEffect"/> class.
+    /// </summary>
+    /// <param name="frequency">Central frequency.</param>
+    /// <param name="width">Filter width.</param>
     public BandRejectFilterEffect(Frequency frequency, Width width)
     {
       Frequency = frequency;

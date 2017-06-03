@@ -10,10 +10,19 @@ namespace SoxSharp.Effects
   /// </summary>
   public class BandPassFilterEffect : BaseEffect
   {
+    /// <summary>
+    /// SoX effect name.
+    /// </summary>
     public override string Name { get { return "bandpass"; } }
 
+    /// <summary>
+    /// Central frequency.
+    /// </summary>
     public Frequency Frequency { get; set; }
 
+    /// <summary>
+    /// Filter width.
+    /// </summary>
     public Width Width { get; set; }
 
     /// <summary>
@@ -22,6 +31,11 @@ namespace SoxSharp.Effects
     public bool? SkirtGain { get; set; }
 
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="frequency">Central frequency.</param>
+    /// <param name="width">Filter width.</param>
     public BandPassFilterEffect(double frequency, double width)
     {
       Frequency = frequency;
@@ -29,6 +43,11 @@ namespace SoxSharp.Effects
     }
 
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="frequency">Central frequency.</param>
+    /// <param name="width">Filter width.</param>
     public BandPassFilterEffect(Frequency frequency, Width width)
     {
       Frequency = frequency;

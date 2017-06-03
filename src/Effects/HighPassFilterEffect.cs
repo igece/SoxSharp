@@ -10,20 +10,29 @@ namespace SoxSharp.Effects
   /// </summary>
   public class HighPassFilterEffect : BaseEffect
   {
+    /// <summary>
+    /// SoX effect name.
+    /// </summary>
     public override string Name { get { return "highpass"; } }
 
+    /// <summary>
+    /// Filter type (single-pole or double-pole).
+    /// </summary>
     public FilterType? Type { get; set; }
 
+    /// <summary>
+    /// Central frequency.
+    /// </summary>
     public Frequency Frequency { get; set; }
 
     /// <summary>
-    /// Applies only to double-pole filter; the default is Q = 0.707 and gives a Butterworth response.
+    /// Filter width. Applies only to double-pole filter; the default is Q = 0.707 and gives a Butterworth response.
     /// </summary>
     public Width? Width { get; set; }
 
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="T:SoxSharp.Effects.NoiseReductionEffect"/> class.
+    /// Initializes a new instance of the <see cref="T:SoxSharp.Effects.HighPassFilterEffect"/> class.
     /// </summary>
     public HighPassFilterEffect(double frequency)
     {
@@ -32,7 +41,7 @@ namespace SoxSharp.Effects
 
 
     /// <summary>
-		/// Initializes a new instance of the <see cref="T:SoxSharp.Effects.NoiseReductionEffect"/> class.
+		/// Initializes a new instance of the <see cref="T:SoxSharp.Effects.HighPassFilterEffect"/> class.
 		/// </summary>
     public HighPassFilterEffect(double frequency, double width)
     : this(frequency)
@@ -41,12 +50,18 @@ namespace SoxSharp.Effects
     }
 
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="T:SoxSharp.Effects.HighPassFilterEffect"/> class.
+    /// </summary>
     public HighPassFilterEffect(Frequency frequency)
     {
       Frequency = frequency;
     }
 
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="T:SoxSharp.Effects.HighPassFilterEffect"/> class.
+    /// </summary>
     public HighPassFilterEffect(Frequency frequency, Width width)
     : this(frequency)
     {

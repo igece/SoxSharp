@@ -13,6 +13,9 @@ namespace SoxSharp.Effects
   /// </summary>
   public class TrimEffect : BaseEffect
   {
+    /// <summary>
+    /// SoX effect name.
+    /// </summary>
     public override string Name { get { return "trim"; } }
 
     public readonly List<Position> Positions = new List<Position>();

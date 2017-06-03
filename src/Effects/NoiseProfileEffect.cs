@@ -11,6 +11,9 @@ namespace SoxSharp.Effects
   /// </summary>
   public class NoiseProfileEffect : BaseEffect
   {
+    /// <summary>
+    /// SoX effect name.
+    /// </summary>
     public override string Name { get { return "noiseprof"; } }
 
     public string File { get; set; }

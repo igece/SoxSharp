@@ -42,7 +42,7 @@
     /// </summary>
     AIFFC,
     /// <summary>
-    /// Raw audio.
+    /// Raw (headerless) audio file with a default sample rate of 8kHz and encoded as 8-bit A-law.
     /// </summary>
     AL,
     /// <summary>
@@ -100,9 +100,23 @@
     /// Self-describing variant of CVSD.
     /// </summary>
     DVMS,
+    /// <summary>
+    /// Raw (headerless) audio file with a default sample rate of 8kHz and encoded as 32-bit floating point PCM.
+    /// </summary>
     F32,
+    /// <summary>
+    /// [DEPRECATED] Raw (headerless) audio file with a default sample rate of 8kHz and encoded as 4 bytes floating point PCM.
+    /// Superseded by F32 type.
+    /// </summary>
     F4,
+    /// <summary>
+    /// Raw (headerless) audio file with a default sample rate of 8kHz and encoded as 64-bit floating point PCM.
+    /// </summary>
     F64,
+    /// <summary>
+    /// [DEPRECATED] Raw (headerless) audio file with a default sample rate of 8kHz and encoded as 8 bytes floating point PCM.
+    /// Superseded by F64 type.
+    /// </summary>
     F8,
     FAP,
     /// <summary>
@@ -120,23 +134,60 @@
     HTK,
     IMA,
     IRCAM,
+    /// <summary>
+    /// Raw (headerless) audio file with a default sample rate of 8kHz and encoded as inverse bit order 8-bit A-law.
+    /// </summary>
     LA,
     LPC,
     LPC10,
+    /// <summary>
+    /// Raw (headerless) audio file with a default sample rate of 8kHz and encoded as inverse bit order 8-bit μ-law.
+    /// </summary>
     LU,
     MAUD,
     MP2,
     MP3,
     NIST,
     PRC,
+    /// <summary>
+    /// Raw (headerless) audio file.
+    /// </summary>
     RAW,
+    /// <summary>
+    /// [DEPRECATED] Raw (headerless) audio file with a default sample rate of 8kHz and encoded as 1 byte signed integer PCM.
+    /// Superseded by S8 type.
+    /// /// </summary>
     S1,
+    /// <summary>
+    /// Raw (headerless) audio file with a default sample rate of 8kHz and encoded as 16-bit signed integer PCM.
+    /// </summary>
     S16,
+    /// <summary>
+    /// [DEPRECATED] Raw (headerless) audio file with a default sample rate of 8kHz and encoded as 2 bytes signed integer PCM.
+    /// Superseded by S16 type.
+    /// </summary>
     S2,
+    /// <summary>
+    /// Raw (headerless) audio file with a default sample rate of 8kHz and encoded as 24-bit signed integer PCM.
+    /// </summary>
     S24,
+    /// <summary>
+    /// [DEPRECATED] Raw (headerless) audio file with a default sample rate of 8kHz and encoded as 3 bytes signed integer PCM.
+    /// Superseded by S24 type.
+    /// </summary>
     S3,
+    /// <summary>
+    /// Raw (headerless) audio file with a default sample rate of 8kHz and encoded as 32-bit signed integer PCM.
+    /// </summary>
     S32,
+    /// <summary>
+    /// [DEPRECATED] Raw (headerless) audio file with a default sample rate of 8kHz and encoded as 4 bytes signed integer PCM.
+    /// Superseded by S32 type.
+    /// </summary>
     S4,
+    /// <summary>
+    /// Raw (headerless) audio file with a default sample rate of 8kHz and encoded as 8-bit signed integer PCM.
+    /// </summary>
     S8,
     SB,
     SF,
@@ -150,15 +201,46 @@
     SPH,
     SW,
     TXW,
+    /// <summary>
+    /// [DEPRECATED] Raw (headerless) audio file with a default sample rate of 8kHz and encoded as 1 byte unsigned integer PCM.
+    /// Superseded by U8 type.
+    /// </summary>
     U1,
+    /// <summary>
+    /// Raw (headerless) audio file with a default sample rate of 8kHz and encoded as 16-bit unsigned integer PCM.
+    /// </summary>
     U16,
+    /// <summary>
+    /// [DEPRECATED] Raw (headerless) audio file with a default sample rate of 8kHz and encoded as 2 bytes unsigned integer PCM.
+    /// Superseded by U16 type.
+    /// </summary>
     U2,
+    /// <summary>
+    /// Raw (headerless) audio file with a default sample rate of 8kHz and encoded as 24-bit unsigned integer PCM.
+    /// </summary>
     U24,
+    /// <summary>
+    /// [DEPRECATED] Raw (headerless) audio file with a default sample rate of 8kHz and encoded as 3 bytes unsigned integer PCM.
+    /// Superseded by U24 type.
+    /// </summary>
     U3,
+    /// <summary>
+    /// Raw (headerless) audio file with a default sample rate of 8kHz and encoded as 32-bit unsigned integer PCM.
+    /// </summary>
     U32,
+    /// <summary>
+    /// [DEPRECATED] Raw (headerless) audio file with a default sample rate of 8kHz and encoded as 4 bytes unsigned integer PCM.
+    /// Superseded by U32 type.
+    /// </summary>
     U4,
+    /// <summary>
+    /// Raw (headerless) audio file with a default sample rate of 8kHz and encoded as 8-bit unsigned integer PCM.
+    /// </summary>
     U8,
     UB,
+    /// <summary>
+    /// Raw (headerless) audio file with a default sample rate of 8kHz and encoded as 8-bit μ-law.
+    /// </summary>
     UL,
     UW,
     /// <summary>

@@ -11,6 +11,9 @@ namespace SoxSharp.Effects
   /// </summary>
   public class NoiseReductionEffect : BaseEffect
   {
+    /// <summary>
+    /// SoX effect name.
+    /// </summary>
     public override string Name { get { return "noisered"; } }
 
     public string File { get; set; }

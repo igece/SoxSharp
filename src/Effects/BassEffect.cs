@@ -10,6 +10,9 @@ namespace SoxSharp.Effects
   /// </summary>
   public class BassEffect : BaseEffect
   {
+    /// <summary>
+    /// SoX effect name.
+    /// </summary>
     public override string Name { get { return "bass"; } }
 
     /// <summary>

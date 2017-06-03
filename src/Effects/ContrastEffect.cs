@@ -8,6 +8,9 @@ namespace SoxSharp.Effects
   /// </summary>
   public class ContrastEffect : BaseEffect
   {
+    /// <summary>
+    /// SoX effect name.
+    /// </summary>
     public override string Name { get { return "contrast"; } }
 
     /// <summary>

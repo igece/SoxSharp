@@ -9,6 +9,9 @@ namespace SoxSharp.Effects
   /// </summary>
   public class VolumeEffect : BaseEffect
   {
+    /// <summary>
+    /// SoX effect name.
+    /// </summary>
     public override string Name { get { return "vol"; } }
 
     /// <summary>

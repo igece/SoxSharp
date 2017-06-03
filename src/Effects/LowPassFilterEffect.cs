@@ -10,6 +10,9 @@ namespace SoxSharp.Effects
   /// </summary>
   public class LowPassFilterEffect : BaseEffect
   {
+    /// <summary>
+    /// SoX effect name.
+    /// </summary>
     public override string Name { get { return "lowpass"; } }
 
     public FilterType? Type { get; set; }
