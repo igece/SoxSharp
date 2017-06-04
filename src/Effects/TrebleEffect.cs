@@ -35,12 +35,21 @@ namespace SoxSharp.Effects
     public Width? Width { get; set; }
 
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="T:SoxSharp.Effects.TrebleEffect"/> class.
+    /// </summary>
+    /// <param name="gain">Gain value.</param>
     public TrebleEffect(double gain)
     {
       Gain = gain;
     }
 
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="T:SoxSharp.Effects.TrebleEffect"/> class.
+    /// </summary>
+    /// <param name="gain">Gain value.</param>
+    /// <param name="frequency">Central frequency.</param>
     public TrebleEffect(double gain, double frequency)
     : this(gain)
     {
@@ -48,6 +57,12 @@ namespace SoxSharp.Effects
     }
 
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="T:SoxSharp.Effects.TrebleEffect"/> class.
+    /// </summary>
+    /// <param name="gain">Gain value.</param>
+    /// <param name="frequency">Central frequency.</param>
+    /// <param name="width">Shelf transition steep.</param>
     public TrebleEffect(double gain, double frequency, double width)
     : this(gain, frequency)
     {
@@ -55,6 +70,11 @@ namespace SoxSharp.Effects
     }
 
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="T:SoxSharp.Effects.TrebleEffect"/> class.
+    /// </summary>
+    /// <param name="gain">Gain value.</param>
+    /// <param name="frequency">Central frequency.</param>
     public TrebleEffect(double gain, Frequency frequency)
     : this(gain)
     {
@@ -62,6 +82,12 @@ namespace SoxSharp.Effects
     }
 
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="T:SoxSharp.Effects.TrebleEffect"/> class.
+    /// </summary>
+    /// <param name="gain">Gain value.</param>
+    /// <param name="frequency">Central frequency.</param>
+    /// <param name="width">Shelf transition steep.</param>
     public TrebleEffect(double gain, Frequency frequency, Width width)
     : this(gain, frequency)
     {

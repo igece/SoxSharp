@@ -7,10 +7,11 @@ using System.Text.RegularExpressions;
 using SoxSharp.Effects;
 using SoxSharp.Exceptions;
 
+
 namespace SoxSharp
 {
   /// <summary>
-  /// Encapsulates all the information needed to launch
+  /// Encapsulates all the information needed to launch SoX and handle its output.
   /// </summary>
   public class Sox : IDisposable
   {

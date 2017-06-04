@@ -18,15 +18,27 @@ namespace SoxSharp.Effects
     /// </summary>
     public override string Name { get { return "trim"; } }
 
+    /// <summary>
+    /// The positions.
+    /// </summary>
     public readonly List<Position> Positions = new List<Position>();
 
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="T:SoxSharp.Effects.TrimEffect"/> class.
+    /// </summary>
+    /// <param name="position">Position to use.</param>
     public TrimEffect(Position position)
     {
       Positions.Add(position);
     }
 
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="T:SoxSharp.Effects.TrimEffect"/> class.
+    /// </summary>
+    /// <param name="position1">First position to use.</param>
+    /// <param name="position2">Second position to use.</param>
     public TrimEffect(Position position1, Position position2)
     {
       Positions.Add(position1);
@@ -34,6 +46,10 @@ namespace SoxSharp.Effects
     }
 
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="T:SoxSharp.Effects.TrimEffect"/> class.
+    /// </summary>
+    /// <param name="positions">Positions to use.</param>
     public TrimEffect(Position[] positions)
     {
       Positions.AddRange(positions);

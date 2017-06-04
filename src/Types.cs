@@ -229,7 +229,14 @@
     /// </summary>
     MP3,
 
+    /// <summary>
+    /// SPHERE (SPeech HEader Resources). Format defined by NIST (National Institute of Standards and Technology) and
+    /// used with speech audio. SoX can read these files when they contain μ-law and PCM data. It will ignore any header
+    /// information that says the data is compressed using shorten compression and will treat the data as either μ-law
+    /// or PCM.
+    /// </summary>
     NIST,
+
     PRC,
 
     /// <summary>
@@ -281,17 +288,41 @@
     /// </summary>
     S8,
 
+    /// <summary>
+    /// [DEPRECATED] Raw (headerless) audio file with a default sample rate of 8kHz and encoded as 1 byte signed integer PCM.
+    /// Superseded by S8 type.
+    /// </summary>
     SB,
+
     SF,
+
+    /// <summary>
+    /// [DEPRECATED] Raw (headerless) audio file with a default sample rate of 8kHz and encoded as 4 bytes signed integer PCM.
+    /// Superseded by S32 type.
+    /// </summary>
     SL,
+
     SMP,
     SND,
     SNDR,
     SNDT,
     SOU,
     SOX,
+
+    /// <summary>
+    /// SPHERE (SPeech HEader Resources). Format defined by NIST (National Institute of Standards and Technology) and
+    /// used with speech audio. SoX can read these files when they contain μ-law and PCM data. It will ignore any header
+    /// information that says the data is compressed using shorten compression and will treat the data as either μ-law
+    /// or PCM.
+    /// </summary>
     SPH,
+
+    /// <summary>
+    /// [DEPRECATED] Raw (headerless) audio file with a default sample rate of 8kHz and encoded as 2 bytes signed integer PCM.
+    /// Superseded by S16 type.
+    /// </summary>
     SW,
+
     TXW,
 
     /// <summary>
@@ -338,6 +369,10 @@
     /// </summary>
     U8,
 
+    /// <summary>
+    /// [DEPRECATED] Raw (headerless) audio file with a default sample rate of 8kHz and encoded as 1 byte unsigned integer PCM.
+    /// Superseded by U8 type.
+    /// </summary>
     UB,
 
     /// <summary>
@@ -345,6 +380,10 @@
     /// </summary>
     UL,
 
+    /// <summary>
+    /// [DEPRECATED] Raw (headerless) audio file with a default sample rate of 8kHz and encoded as 2 bytes unsigned integer PCM.
+    /// Superseded by S16 type.
+    /// </summary>
     UW,
 
     /// <summary>
@@ -352,11 +391,55 @@
     /// </summary>
     VMS,
 
+    /// <summary>
+    /// Sound Blaster VOC files. VOC files are multi-part and contain silence parts, looping, and different sample rates
+    /// for different chunks. On input, the silence parts are filled out, loops are rejected, and sample data with a new
+    /// sample rate is rejected. Silence with a different sample rate is generated appropriately. On output, silence is
+    /// not detected, nor are impossible sample rates. SoX supports reading (but not writing) VOC files with multiple
+    /// blocks, and files containing μ-law, A-law, and 2/3/4-bit ADPCM samples.
+    /// </summary>
     VOC,
+
+    /// <summary>
+    /// A headerless file of Dialogic/OKI ADPCM audio data. This ADPCM data has 12-bit precision packed into only 4-bits.
+    /// Some early Dialogic hardware does not always reset the ADPCM encoder at the start of each vox file. This can
+    /// result in clipping and/or DC offset problems when it comes to decoding the audio. Whilst little can be done
+    /// about the clipping, a DC offset can be removed by passing the decoded audio through a high-pass filter.
+    /// </summary>
     VOX,
+
+    /// <summary>
+    /// Microsoft .WAV RIFF files. This is the native audio file format of Windows, and widely used for uncompressed
+    /// audio. Normally .wav files have all formatting information in their headers, and so do not need any format
+    /// options specified for an input file. If any are, they will override the file header, and you will be warned to
+    /// this effect. Output format options will cause a format conversion, and the .wav will written appropriately.
+    /// SoX can read and write linear PCM, floating point, μ-law, A-law, MS ADPCM, and IMA (or DVI) ADPCM encoded
+    /// samples. WAV files can also contain audio encoded in many other ways (not currently supported with SoX)
+    /// e.g. MP3; in some cases such a file can still be read by SoX by overriding the file type. Big endian versions
+    /// of RIFF files, called RIFX, are also supported.
+    /// </summary>
     WAV,
+
+    /// <summary>
+    /// A non-standard, but widely used, variant of .wav. Some applications cannot read a standard WAV file header for
+    /// PCM-encoded data with sample-size greater than 16-bits or with more than two channels, but can read a non-
+    /// standard WAV header. It is likely that such applications will eventually be updated to support the standard
+    /// header, but in the mean time, this SoX format can be used to create files with the non-standard header that
+    /// should work with these applications. Note that SoX will automatically detect and read WAV files with the
+    /// non-standard header.
+    /// </summary>
     WAVPCM,
+
+    /// <summary>
+    /// Psion 8-bit A-law. Used on Psion SIBO PDAs (Series 3 and similar). This format is deprecated in SoX, but will
+    /// continue to be used in libsndfile.
+    /// </summary>
     WVE,
+
+    /// <summary>
+    /// Maxis XA files. These are 16-bit ADPCM audio files used by Maxis games. Writing .xa files is currently not
+    /// supported.
+    /// </summary>
     XA
   }
 
