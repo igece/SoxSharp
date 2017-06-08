@@ -7,7 +7,7 @@ namespace SoxSharp
   /// <summary>
   /// Utility class that converts a a SoX file size string (an integer or double value, optionally followed by a k, M or G character) to a numeric value.
   /// </summary>
-  public class FormattedSize
+  public static class FormattedSize
   {
     /// <summary>
     /// Converts a SoX file size string to a <see cref="System.UInt64"/> value.
@@ -18,7 +18,7 @@ namespace SoxSharp
     {
       UInt64 multiplier = 1;
 
-			if (formattedSize.EndsWith("k", StringComparison.InvariantCulture))
+      if (formattedSize.EndsWith("k", StringComparison.InvariantCulture))
       {
         multiplier = 1024;
         formattedSize = formattedSize.Substring(0, formattedSize.Length - 1);
