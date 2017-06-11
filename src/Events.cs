@@ -13,9 +13,10 @@ namespace SoxSharp
     /// </summary>
     /// <param name="logLevel">Message severity.</param>
     /// <param name="message">Message text.</param>
-    public LogMessageEventArgs(LogLevelType logLevel, string message)
+    public LogMessageEventArgs(LogLevelType logLevel, string source, string message)
     {
       LogLevel = logLevel;
+      Source = source;
       Message = message;
     }
 
@@ -23,6 +24,11 @@ namespace SoxSharp
     /// Message severity.
     /// </summary>
     public LogLevelType LogLevel { get; private set; }
+
+    /// <summary>
+    /// SoX logger module.
+    /// </summary>
+    public string Source { get; private set; }
 
     /// <summary>
     /// Message text.

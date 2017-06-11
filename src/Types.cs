@@ -487,13 +487,18 @@
   public enum LogLevelType
   {
     /// <summary>
-    /// Error message.
-    /// </summary>
-    Error,
-
-    /// <summary>
     /// Warning message.
     /// </summary>
-    Warning
+    Warning,
+
+    /// <summary>
+    /// Information message.
+    /// </summary>
+    Info,
+
+    /// <summary>
+    /// Debug message.
+    /// </summary>
+    Debug
   }
 }
