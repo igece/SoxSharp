@@ -34,6 +34,7 @@ namespace SoxSharp.Effects
     /// <summary>
     /// Initializes a new instance of the <see cref="T:SoxSharp.Effects.HighPassFilterEffect"/> class.
     /// </summary>
+    /// <param name="frequency">Central frequency.</param>
     public HighPassFilterEffect(double frequency)
     {
       Frequency = frequency;
@@ -43,6 +44,8 @@ namespace SoxSharp.Effects
     /// <summary>
 		/// Initializes a new instance of the <see cref="T:SoxSharp.Effects.HighPassFilterEffect"/> class.
 		/// </summary>
+    /// <param name="frequency">Central frequency.</param>
+    /// <param name="width">Filter width.</param>
     public HighPassFilterEffect(double frequency, double width)
     : this(frequency)
     {
@@ -53,6 +56,7 @@ namespace SoxSharp.Effects
     /// <summary>
     /// Initializes a new instance of the <see cref="T:SoxSharp.Effects.HighPassFilterEffect"/> class.
     /// </summary>
+    /// <param name="frequency">Central frequency.</param>
     public HighPassFilterEffect(Frequency frequency)
     {
       Frequency = frequency;
@@ -62,6 +66,8 @@ namespace SoxSharp.Effects
     /// <summary>
     /// Initializes a new instance of the <see cref="T:SoxSharp.Effects.HighPassFilterEffect"/> class.
     /// </summary>
+    /// <param name="frequency">Central frequency.</param>
+    /// <param name="width">Filter width.</param>
     public HighPassFilterEffect(Frequency frequency, Width width)
     : this(frequency)
     {
