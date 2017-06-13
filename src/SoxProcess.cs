@@ -79,7 +79,16 @@ namespace SoxSharp
 
       SoxProcess soxProc = new SoxProcess();
       soxProc.StartInfo.FileName = soxExecutable;
-      soxProc.StartInfo.WorkingDirectory = Path.GetDirectoryName(soxExecutable);
+      soxProc.StartInfo.WorkingDirectory = Environment.CurrentDirectory;
+
+      string soxPath = Path.GetDirectoryName(soxExecutable);
+
+      if (!String.IsNullOrEmpty(soxPath))
+      {
+        string pathEnv = Environment.GetEnvironmentVariable("PATH");
+        pathEnv += Path.PathSeparator + soxPath;
+        soxProc.StartInfo.EnvironmentVariables["PATH"] = pathEnv;
+      }
 
       return soxProc;
     }
