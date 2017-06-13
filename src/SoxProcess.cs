@@ -10,7 +10,7 @@ namespace SoxSharp
   {
     public static readonly Regex InfoRegex = new Regex(@"Input File\s*: .+\r?\nChannels\s*: (\d+)\r?\nSample Rate\s*: (\d+)\r?\nPrecision\s*: ([\s\S]+?)\r?\nDuration\s*: (\d{2}:\d{2}:\d{2}\.?\d{2}?)[\s\S]+?\r?\nFile Size\s*: (\d+\.?\d{0,2}?[k|M|G]?)\r?\nBit Rate\s*: (\d+\.?\d{0,2}?[k|M|G]?)\r?\nSample Encoding\s*: (.+)");
     public static readonly Regex ProgressRegex = new Regex(@"In:(\d{1,3}\.?\d{0,2})%\s+(\d{2}:\d{2}:\d{2}\.?\d{0,2})\s+\[(\d{2}:\d{2}:\d{2}\.?\d{0,2})\]\s+Out:(\d+\.?\d{0,2}[k|M|G]?)");
-    public static readonly Regex LogRegex = new Regex(@"(FAIL|WARN)\s(.+)");
+    public static readonly Regex LogRegex = new Regex(@"(FAIL|WARN)\s(\w+):\s(.+)");
 
 
     private SoxProcess()
