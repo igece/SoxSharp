@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -16,12 +17,12 @@ namespace SoxSharp
   public class Sox : IDisposable
   {
     /// <summary>
-    /// Provides updated progress status while <see cref="T:Sox.Process"/> is being executed.
+    /// Provides updated progress status while SoX is being executed.
     /// </summary>
     public event EventHandler<ProgressEventArgs> OnProgress = null;
 
     /// <summary>
-    /// Occurs when SoX sends a warning or error message.
+    /// Occurs when SoX generates any non-FAIL log message.
     /// </summary>
     public event EventHandler<LogMessageEventArgs> OnLogMessage = null;
 
@@ -68,6 +69,8 @@ namespace SoxSharp
 
 
     private SoxProcess soxProcess_ = null;
+    private string lastError_ = null;
+    private string lastErrorSource_ = null;
     private bool disposed_ = false;
 
 
@@ -81,6 +84,12 @@ namespace SoxSharp
       Output = new OutputFormatOptions();
       Effects = new List<IBaseEffect>();
       Path = path;
+    }
+
+
+    ~Sox()
+    {
+      Dispose(false);
     }
 
 
@@ -110,6 +119,9 @@ namespace SoxSharp
 
       soxProcess_ = SoxProcess.Create(Path);
 
+      lastError_ = null;
+      lastErrorSource_ = null;
+
       try
       {
         soxProcess_.StartInfo.RedirectStandardOutput = true;
@@ -118,11 +130,13 @@ namespace SoxSharp
 
         string output = soxProcess_.StandardOutput.ReadToEnd();
 
+        if (String.IsNullOrEmpty(output))
+          output = soxProcess_.StandardError.ReadToEnd();
+
         if (soxProcess_.WaitForExit(10000) == false)
           throw new TimeoutException("SoX response timeout");
 
         CheckForLogMessage(output);
-        CheckExitCode(soxProcess_.ExitCode);
 
         if (output != null)
         {
@@ -166,70 +180,29 @@ namespace SoxSharp
     /// <summary>
     /// Spawns a new SoX process using the specified options in this instance.
     /// </summary>
-    /// <returns>Exit code returned by SoX.</returns>
     /// <param name="inputFile">Audio file to be processed.</param>
-    public int Process(string inputFile)
+    public void Process(string inputFile)
     {
-      return Process(inputFile, null);
+      Process(inputFile, null);
     }
 
 
     /// <summary>
     /// Spawns a new SoX process using the specified options in this instance.
     /// </summary>
-    /// <returns>Exit code returned by SoX.</returns>
     /// <param name="inputFile">Audio file to be processed.</param>
     /// <param name="outputFile">Output file.</param>
-    public int Process(string inputFile, string outputFile)
+    public void Process(string inputFile, string outputFile)
     {
       soxProcess_ = SoxProcess.Create(Path);
 
+      lastError_ = null;
+      lastErrorSource_ = null;
+
       try
       {
-        soxProcess_.ErrorDataReceived += ((sender, received) =>
-        {
-          if (received.Data != null)
-          {
-            if (OnProgress != null)
-            {
-              Match matchProgress = SoxProcess.ProgressRegex.Match(received.Data);
-
-              if (matchProgress.Success)
-              {
-                try
-                {
-                  UInt16 progress = Convert.ToUInt16(double.Parse(matchProgress.Groups[1].Value, CultureInfo.InvariantCulture));
-                  TimeSpan processed = TimeSpan.ParseExact(matchProgress.Groups[2].Value, @"hh\:mm\:ss\.ff", CultureInfo.InvariantCulture);
-                  TimeSpan remaining = TimeSpan.ParseExact(matchProgress.Groups[3].Value, @"hh\:mm\:ss\.ff", CultureInfo.InvariantCulture);
-                  UInt64 outputSize = FormattedSize.ToUInt64(matchProgress.Groups[4].Value);
-
-                  ProgressEventArgs eventArgs = new ProgressEventArgs(progress, processed, remaining, outputSize);
-                  OnProgress(sender, eventArgs);
-
-                  if (eventArgs.Abort)
-                    Abort();
-
-                  return;
-                }
-
-                catch (OverflowException)
-                {
-                  // SoX v14.3.1 (at least) sometimes report invalid time values (i.e. 06:31:60.00).
-                  // Just ignore this progress update.
-                  return;
-                }
-
-                catch (Exception ex)
-                {
-                  throw new SoxException("Unexpected output from SoX", ex);
-                }
-              }
-            }
-
-            if (CheckForLogMessage(received.Data))
-              return;
-          }
-        });
+        soxProcess_.ErrorDataReceived += OnSoxProcessOutputReceived;
+        soxProcess_.OutputDataReceived += OnSoxProcessOutputReceived;
 
         List<string> args = new List<string>();
 
@@ -254,8 +227,6 @@ namespace SoxSharp
         else
           args.Add("--null");
 
-        args.Add(inputFile);
-
         // Output options.
         args.Add(Output.ToString());
 
@@ -276,18 +247,29 @@ namespace SoxSharp
         try
         {
           soxProcess_.Start();
+          soxProcess_.BeginOutputReadLine();
           soxProcess_.BeginErrorReadLine();
           soxProcess_.WaitForExit();
-
-          if (soxProcess_ != null)
-            return soxProcess_.ExitCode;
-
-          return -1;
         }
 
         catch (Exception ex)
         {
           throw new SoxException("Cannot spawn SoX process", ex);
+        }
+
+        if (!String.IsNullOrEmpty(lastError_))
+        {
+          if (String.IsNullOrEmpty(lastErrorSource_))
+            throw new SoxException(lastError_);
+
+          switch (lastErrorSource_)
+          {
+            case "getopt":
+              throw new SoxException("Invalid parameter: " + lastError_);
+
+            default:
+              throw new SoxException("Processing error: " + lastError_);
+          }
         }
       }
 
@@ -302,12 +284,57 @@ namespace SoxSharp
     }
 
 
+    private void OnSoxProcessOutputReceived(object sender, DataReceivedEventArgs received)
+    {
+      if (received.Data != null)
+      {
+        if (OnProgress != null)
+        {
+          Match matchProgress = SoxProcess.ProgressRegex.Match(received.Data);
+
+          if (matchProgress.Success)
+          {
+            try
+            {
+              UInt16 progress = Convert.ToUInt16(double.Parse(matchProgress.Groups[1].Value, CultureInfo.InvariantCulture));
+              TimeSpan processed = TimeSpan.ParseExact(matchProgress.Groups[2].Value, @"hh\:mm\:ss\.ff", CultureInfo.InvariantCulture);
+              TimeSpan remaining = TimeSpan.ParseExact(matchProgress.Groups[3].Value, @"hh\:mm\:ss\.ff", CultureInfo.InvariantCulture);
+              UInt64 outputSize = FormattedSize.ToUInt64(matchProgress.Groups[4].Value);
+
+              ProgressEventArgs eventArgs = new ProgressEventArgs(progress, processed, remaining, outputSize);
+              OnProgress(sender, eventArgs);
+
+              if (eventArgs.Abort)
+                Abort();
+
+              return;
+            }
+
+            catch (OverflowException)
+            {
+              // SoX v14.3.1 (at least) sometimes report invalid time values (i.e. 06:31:60.00).
+              // Just ignore this progress update.
+              return;
+            }
+
+            catch (Exception ex)
+            {
+              throw new SoxException("Unexpected output from SoX", ex);
+            }
+          }
+        }
+
+        CheckForLogMessage(received.Data);
+      }
+    }
+
+
     /// <summary>
     /// Kills the SoX process.
     /// </summary>
     public void Abort()
     {
-      if ((soxProcess_ != null) && (soxProcess_.Id != -1))
+      if ((soxProcess_ != null) && !soxProcess_.HasExited)
       {
         try
         {
@@ -332,51 +359,41 @@ namespace SoxSharp
 
       if (logMatch.Success)
       {
-        try
+        string logLevel = logMatch.Groups[1].Value;
+        string source = logMatch.Groups[2].Value;
+        string message = logMatch.Groups[3].Value;
+
+        if ("DBUG".Equals(logLevel) && (OnLogMessage != null))
+          OnLogMessage(this, new LogMessageEventArgs(LogLevelType.Debug, source, message));
+
+        if ("INFO".Equals(logLevel) && (OnLogMessage != null))
+          OnLogMessage(this, new LogMessageEventArgs(LogLevelType.Info, source, message));
+
+        if ("WARN".Equals(logLevel) && (OnLogMessage != null))
+          OnLogMessage(this, new LogMessageEventArgs(LogLevelType.Warning, source, message));
+
+        else if ("FAIL".Equals(logLevel))
         {
-          string logLevel = logMatch.Groups[1].Value;
-          string message = logMatch.Groups[2].Value;
+          if (String.IsNullOrEmpty(lastError_))
+            lastError_ = message;
 
-          if (OnLogMessage != null)
-          {
-            if ("WARN".Equals(logLevel))
-              OnLogMessage(this, new LogMessageEventArgs(LogLevelType.Warning, message));
-            else if ("FAIL".Equals(logLevel))
-              OnLogMessage(this, new LogMessageEventArgs(LogLevelType.Error, message));
-          }
-
-          return true;
+          if (String.IsNullOrEmpty(lastErrorSource_))
+            lastErrorSource_ = source;
         }
 
-        catch (Exception)
-        {
-          return false;
-        }
+        return true;
       }
 
       return false;
     }
 
 
-    protected void CheckExitCode(int exitCode)
-    {
-      switch (exitCode)
-      {
-        case 1:
-          throw new SoxException("SoX did not recognized some command-line parameters");
-
-        case 2:
-          throw new SoxException("SoX returned an error while processing");
-      }
-    }
-
-
-    private void Dispose(bool disposing)
+    protected virtual void Dispose(bool disposing)
     {
       if (disposed_)
         return;
 
-      if ((soxProcess_ != null) && (!soxProcess_.HasExited))
+      if (disposing)
         Abort();
 
       disposed_ = true;
