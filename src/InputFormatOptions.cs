@@ -34,7 +34,12 @@ namespace SoxSharp
     /// <returns>String containing SoX command arguments.</returns>
     public override string ToString()
     {
-      List<string> inputOptions = new List<string>(3) { base.ToString() };
+      List<string> inputOptions = new List<string>(3);
+
+      string baseStr = base.ToString();
+
+      if (!string.IsNullOrEmpty(baseStr))
+        inputOptions.Add(baseStr);
 
       if (Volume.HasValue)
         inputOptions.Add("--volume " + Volume.Value);
@@ -44,6 +49,5 @@ namespace SoxSharp
 
       return string.Join(" ", inputOptions);
     }
-
   }
 }

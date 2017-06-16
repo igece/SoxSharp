@@ -39,7 +39,12 @@ namespace SoxSharp
     /// <returns>String containing SoX command arguments.</returns>
     public override string ToString()
     {
-      List<string> outputOptions = new List<string>(4) { base.ToString() };
+      List<string> outputOptions = new List<string>(4);
+
+      string baseStr = base.ToString();
+
+      if (!string.IsNullOrEmpty(baseStr))
+        outputOptions.Add(baseStr);
 
       if (Compression.HasValue)
         outputOptions.Add("--compression " + Compression.Value);
