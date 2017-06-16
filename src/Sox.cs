@@ -68,6 +68,9 @@ namespace SoxSharp
     public string CustomEffects { get; set; }
 
 
+    public string LastCommand { get; private set; }
+
+
     private SoxProcess soxProcess_ = null;
     private string lastError_ = null;
     private string lastErrorSource_ = null;
@@ -127,6 +130,8 @@ namespace SoxSharp
         soxProcess_.StartInfo.RedirectStandardOutput = true;
         soxProcess_.StartInfo.Arguments = "--info " + inputFile;
         soxProcess_.Start();
+
+        LastCommand = Path + " " + soxProcess_.StartInfo.Arguments;
 
         string output = soxProcess_.StandardOutput.ReadToEnd();
 
@@ -243,6 +248,7 @@ namespace SoxSharp
         args.Add(CustomEffects);
 
         soxProcess_.StartInfo.Arguments = String.Join(" ", args);
+        LastCommand = Path + " " + soxProcess_.StartInfo.Arguments;
 
         try
         {
