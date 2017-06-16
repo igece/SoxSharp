@@ -1,6 +1,4 @@
-﻿using System.Text;
-using System.Globalization;
-
+﻿
 
 namespace SoxSharp.Effects.Types
 {
@@ -33,32 +31,25 @@ namespace SoxSharp.Effects.Types
 
     public override string ToString()
     {
-      StringBuilder effectArgs = new StringBuilder();
-      effectArgs.Append(value_.ToString(CultureInfo.InvariantCulture));
-
       if (units_.HasValue)
       {
         switch (units_.Value)
         {
           case WidthUnits.Hz:
-            effectArgs.Append("h");
-            break;
+            return value_.ToString() + "h";
 
           case WidthUnits.KHz:
-            effectArgs.Append("k");
-            break;
+            return value_.ToString() + "k";
 
           case WidthUnits.Octaves:
-            effectArgs.Append("o");
-            break;
+            return value_.ToString() + "o";
 
           case WidthUnits.Qfactor:
-            effectArgs.Append("q");
-            break;
+            return value_.ToString() + "q";
         }
       }
 
-      return effectArgs.ToString();
+      return value_.ToString();
     }
   }
 }
