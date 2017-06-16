@@ -15,7 +15,7 @@
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
     <PackageId>SoxSharp</PackageId>
-    <PackageVersion>1.1</PackageVersion>
+    <PackageVersion>1.2</PackageVersion>
     <Authors>igece.labs</Authors>
     <PackageLicenseUrl>https://github.com/igece/SoxSharp/blob/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/igece/SoxSharp</PackageProjectUrl>
@@ -23,7 +23,7 @@
     <PackageTags>sox wrapper audio conversion filters</PackageTags>
     <Title>SoxSharp</Title>
     <Description>Library that serves as a wrapper to SoX - the Sound eXchange tool.</Description>
-    <ReleaseVersion>1.1</ReleaseVersion>
+    <ReleaseVersion>1.2.*</ReleaseVersion>
     <PackOnBuild>true</PackOnBuild>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
