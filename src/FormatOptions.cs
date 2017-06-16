@@ -64,7 +64,6 @@ namespace SoxSharp
     /// </summary>
     protected FormatOptions()
     {
-      Glob = true;
     }
 
 
@@ -122,7 +121,7 @@ namespace SoxSharp
       if (!String.IsNullOrEmpty(CustomArgs))
         formatOptions.Add(CustomArgs);
 
-      return String.Join(" ", formatOptions);
+      return string.Join(" ", formatOptions);
     }
   }
 }
