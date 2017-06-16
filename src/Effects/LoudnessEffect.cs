@@ -1,5 +1,6 @@
-﻿using System.Text;
-using SoxSharp.Exceptions;
+﻿using SoxSharp.Exceptions;
+using System.Collections.Generic;
+
 
 namespace SoxSharp.Effects
 {
@@ -66,15 +67,15 @@ namespace SoxSharp.Effects
       if (Reference.HasValue && !Gain.HasValue)
         throw new SoxEffectException(Name, "Reference value set without specifying a Gain value.");
 
-      StringBuilder effectArgs = new StringBuilder(Name);
+      List<string> effectArgs = new List<string>(3) { Name };
 
       if (Gain.HasValue)
-        effectArgs.Append(" " + Gain.Value);
+        effectArgs.Add(Gain.Value.ToString());
 
       if (Reference.HasValue)
-        effectArgs.Append(" " + Reference.Value);
+        effectArgs.Add(Reference.Value.ToString());
 
-      return effectArgs.ToString();
+      return string.Join(" ", effectArgs);
     }
   }
 }

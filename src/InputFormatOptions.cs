@@ -1,4 +1,4 @@
-﻿using System.Text;
+﻿using System.Collections.Generic;
 
 
 namespace SoxSharp
@@ -34,15 +34,15 @@ namespace SoxSharp
     /// <returns>String containing SoX command arguments.</returns>
     public override string ToString()
     {
-      StringBuilder inputOptions = new StringBuilder(base.ToString());
+      List<string> inputOptions = new List<string>(3) { base.ToString() };
 
       if (Volume.HasValue)
-        inputOptions.Append("--volume " + Volume.Value);
+        inputOptions.Add("--volume " + Volume.Value);
 
       if (IgnoreLength.HasValue && (IgnoreLength.Value == true))
-        inputOptions.Append(" --ignore-length");
+        inputOptions.Add("--ignore-length");
 
-      return inputOptions.ToString();
+      return string.Join(" ", inputOptions);
     }
 
   }

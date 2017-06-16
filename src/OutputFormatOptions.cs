@@ -1,4 +1,4 @@
-﻿using System.Text;
+﻿using System.Collections.Generic;
 
 
 namespace SoxSharp
@@ -39,18 +39,18 @@ namespace SoxSharp
     /// <returns>String containing SoX command arguments.</returns>
     public override string ToString()
     {
-      StringBuilder outputOptions = new StringBuilder(base.ToString());
+      List<string> outputOptions = new List<string>(4) { base.ToString() };
 
       if (Compression.HasValue)
-        outputOptions.Append(" --compression " + Compression.Value);
+        outputOptions.Add("--compression " + Compression.Value);
 
       if (AddComment != null)
-        outputOptions.Append(" --add-comment \"" + AddComment + "\"");
+        outputOptions.Add("--add-comment \"" + AddComment + "\"");
 
       if (Comment != null)
-        outputOptions.Append(" --comment \"" + Comment + "\"");
+        outputOptions.Add("--comment \"" + Comment + "\"");
 
-      return outputOptions.ToString();
+      return string.Join(" ", outputOptions);
     }
   }
 }

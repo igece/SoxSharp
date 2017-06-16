@@ -1,5 +1,5 @@
-﻿using System.Text;
-using SoxSharp.Effects.Types;
+﻿using SoxSharp.Effects.Types;
+using System.Collections.Generic;
 
 
 namespace SoxSharp.Effects
@@ -58,12 +58,12 @@ namespace SoxSharp.Effects
     /// effect.</returns>
     public override string ToString()
     {
-      StringBuilder effectArgs = new StringBuilder(Name);
+      List<string> effectArgs = new List<string>(3) { Name };
 
-      effectArgs.Append(" " + Frequency);
-      effectArgs.Append(" " + Width);
+      effectArgs.Add(Frequency.ToString());
+      effectArgs.Add(Width.ToString());
 
-      return effectArgs.ToString();
+      return string.Join(" ", effectArgs);
     }
   }
 }

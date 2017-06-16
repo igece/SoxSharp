@@ -1,4 +1,4 @@
-﻿using System.Text;
+﻿using System.Collections.Generic;
 
 
 namespace SoxSharp.Effects
@@ -35,10 +35,10 @@ namespace SoxSharp.Effects
     /// <returns>A <see cref="T:System.String"/> containing SoX command arguments to apply a Noise Profile effect.</returns>
     public override string ToString()
     {
-      StringBuilder effectArgs = new StringBuilder(Name);
-      effectArgs.Append(" " + File);
+      List<string> effectArgs = new List<string>(2) { Name };
+      effectArgs.Add(File);
 
-      return effectArgs.ToString();
+      return string.Join(" ", effectArgs);
     }
   }
 }

@@ -1,5 +1,4 @@
-﻿using System.Text;
-using System.Globalization;
+﻿using System.Collections.Generic;
 
 
 namespace SoxSharp.Effects
@@ -45,11 +44,11 @@ namespace SoxSharp.Effects
     /// <returns>A <see cref="T:System.String"/> containing SoX command arguments to apply a Noise Reduction effect.</returns>
     public override string ToString()
     {
-      StringBuilder effectArgs = new StringBuilder(Name);
-      effectArgs.Append(" " + File);
+      List<string> effectArgs = new List<string>(3) { Name };
+      effectArgs.Add(File);
 
       if (Amount.HasValue)
-        effectArgs.Append(" " + Amount.Value.ToString(CultureInfo.InvariantCulture));
+        effectArgs.Add(Amount.Value.ToString());
 
       return effectArgs.ToString();
     }

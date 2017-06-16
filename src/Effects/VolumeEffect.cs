@@ -1,5 +1,5 @@
-﻿using System.Text;
-using SoxSharp.Effects.Types;
+﻿using SoxSharp.Effects.Types;
+using System.Collections.Generic;
 
 
 namespace SoxSharp.Effects
@@ -72,8 +72,8 @@ namespace SoxSharp.Effects
     /// <returns>A <see cref="System.String"/> containing SoX command arguments to apply a Volume effect.</returns>
     public override string ToString()
     {
-      StringBuilder effectArgs = new StringBuilder(Name);
-      effectArgs.Append(" " + Gain);
+      List<string> effectArgs = new List<string>(4) { Name };
+      effectArgs.Add(Gain.ToString());
 
       if (Type.HasValue)
       {
@@ -81,25 +81,25 @@ namespace SoxSharp.Effects
         {
           case GainType.Amplitude:
 
-            effectArgs.Append(" amplitude");
+            effectArgs.Add("amplitude");
             break;
 
           case GainType.Power:
 
-            effectArgs.Append(" power");
+            effectArgs.Add("power");
             break;
 
           case GainType.Db:
 
-            effectArgs.Append(" dB");
+            effectArgs.Add("dB");
             break;
         }
       }
 
       if (Limiter.HasValue)
-        effectArgs.Append(" " + Limiter.Value);
+        effectArgs.Add(Limiter.Value.ToString());
 
-      return effectArgs.ToString();
+      return string.Join(" ", effectArgs);
     }
   }
 }

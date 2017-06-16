@@ -1,5 +1,5 @@
-﻿using System.Text;
-using SoxSharp.Effects.Types;
+﻿using SoxSharp.Effects.Types;
+using System.Collections.Generic;
 
 
 namespace SoxSharp.Effects
@@ -102,17 +102,17 @@ namespace SoxSharp.Effects
     /// <returns>A <see cref="T:System.String"/> containing SoX command arguments to apply a Treble effect.</returns>
     public override string ToString()
     {
-      StringBuilder effectArgs = new StringBuilder(Name);
+      List<string> effectArgs = new List<string>(4) { Name };
 
-      effectArgs.Append(" " + Gain);
+      effectArgs.Add(Gain.ToString());
 
       if (Frequency.HasValue)
-        effectArgs.Append(" " + Frequency.Value);
+        effectArgs.Add(Frequency.Value.ToString());
 
       if (Width.HasValue)
-        effectArgs.Append(" " + Width.Value);
+        effectArgs.Add(Width.Value.ToString());
 
-      return effectArgs.ToString();
+      return string.Join(" ", effectArgs);
     }
   }
 }

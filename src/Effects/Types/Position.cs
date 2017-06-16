@@ -3,6 +3,7 @@ using System.Text;
 using System.Collections.Generic;
 using SoxSharp.Exceptions;
 
+
 namespace SoxSharp.Effects.Types
 {
   /// <summary>
@@ -89,33 +90,32 @@ namespace SoxSharp.Effects.Types
 
     public override string ToString()
     {
-      StringBuilder args = new StringBuilder();
+      List<string> position = new List<string>();
 
       if (from_.HasValue)
       {
         switch (from_.Value)
         {
           case PositionFrom.Start:
-            args.Append("=");
+            position.Add("=");
             break;
 
           case PositionFrom.End:
-            args.Append("-");
+            position.Add("-");
             break;
 
           case PositionFrom.Last:
-            args.Append("+");
+            position.Add("+");
             break;
         }
       }
 
       if (time_.HasValue)
-        args.Append(time_.Value.ToString(@"hh\:mm\:ss\.ff"));
+        position.Add(time_.Value.ToString(@"hh\:mm\:ss\.ff"));
       else if (samples_.HasValue)
-        args.Append(samples_.Value).Append("s");
+        position.Add(samples_.Value.ToString() + "s");
 
-      return args.ToString();
+      return string.Join("", position);
     }
   }
-
 }

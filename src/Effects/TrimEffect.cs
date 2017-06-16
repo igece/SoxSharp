@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using SoxSharp.Effects.Types;
 
 
@@ -63,10 +61,7 @@ namespace SoxSharp.Effects
     /// <returns>A <see cref="T:System.String"/> containing SoX command arguments to apply a Trim effect.</returns>
     public override string ToString()
     {
-      StringBuilder effectArgs = new StringBuilder(Name);
-      effectArgs.Append(String.Join(" ", Positions));
-
-      return effectArgs.ToString();
+      return Name + " " + string.Join(" ", Positions);
     }
   }
 }

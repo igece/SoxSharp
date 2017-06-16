@@ -1,5 +1,5 @@
-﻿using System.Text;
-using SoxSharp.Effects.Types;
+﻿using SoxSharp.Effects.Types;
+using System.Collections.Generic;
 
 
 namespace SoxSharp.Effects
@@ -62,15 +62,15 @@ namespace SoxSharp.Effects
     /// <returns>A <see cref="T:System.String"/> containing SoX command arguments to apply an Band-Pass Filter effect.</returns>
     public override string ToString()
     {
-      StringBuilder effectArgs = new StringBuilder(Name);
+      List<string> effectArgs = new List<string>(4) { Name };
 
       if (SkirtGain.HasValue && (SkirtGain.Value == true))
-        effectArgs.Append(" -c");
+        effectArgs.Add("-c");
 
-      effectArgs.Append(" " + Frequency);
-      effectArgs.Append(" " + Width);
+      effectArgs.Add(Frequency.ToString());
+      effectArgs.Add(Width.ToString());
 
-      return effectArgs.ToString();
+      return string.Join(" ", effectArgs);
     }
   }
 }

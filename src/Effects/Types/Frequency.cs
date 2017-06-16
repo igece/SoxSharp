@@ -1,7 +1,4 @@
-﻿using System.Text;
-
-
-namespace SoxSharp.Effects.Types
+﻿namespace SoxSharp.Effects.Types
 {
   public struct Frequency
   {
@@ -32,24 +29,19 @@ namespace SoxSharp.Effects.Types
 
     public override string ToString()
     {
-      StringBuilder freqStr = new StringBuilder();
-      freqStr.Append(value_);
-
       if (units_.HasValue)
       {
         switch (units_.Value)
         {
           case FrequencyUnits.Hz:
-            freqStr.Append("h");
-            break;
+            return value_.ToString() + "h";
 
           case FrequencyUnits.KHz:
-            freqStr.Append("k");
-            break;
+            return value_.ToString() + "k";
         }
       }
 
-      return freqStr.ToString();
+      return value_.ToString();
     }
   }
 }

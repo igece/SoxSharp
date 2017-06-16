@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Text;
+using System.Collections.Generic;
 
 
 namespace SoxSharp
@@ -13,42 +13,42 @@ namespace SoxSharp
     /// Audio file type.
     /// </summary>
     public FileType? Type { get; set; }
-    
+
     /// <summary>
     /// Audio encoding.
     /// </summary>
     public EncodingType? Encoding { get; set; }
-    
+
     /// <summary>
     /// Sample size (bits).
     /// </summary>
     public UInt16? SampleSize { get; set; }
-    
+
     /// <summary>
     /// Encoded nibble order.
     /// </summary>
     public bool? ReverseNibbles { get; set; }
-    
+
     /// <summary>
     /// Encoded bit order.
     /// </summary>
     public bool? ReverseBits { get; set; }
-    
+
     /// <summary>
     /// Encoded byte order.
     /// </summary>
     public ByteOrderType? ByteOrder { get; set; }
-    
+
     /// <summary>
     /// Number of audio channels.
     /// </summary>
     public UInt16? Channels { get; set; }
-    
+
     /// <summary>
     /// Audio sample rate.
     /// </summary>
     public UInt32? SampleRate { get; set; }
-       
+
     /// <summary>
     /// Allow glob wildcard match filename.
     /// </summary>
@@ -74,55 +74,55 @@ namespace SoxSharp
     /// <returns>String containing SoX command arguments.</returns>
     public override string ToString()
     {
-      StringBuilder formatOptions = new StringBuilder();
+      List<string> formatOptions = new List<string>();
 
       if (Type.HasValue)
-        formatOptions.Append(" --type " + Type.Value.ToString().ToLower());
+        formatOptions.Add("--type " + Type.Value.ToString().ToLower());
 
       if (Encoding.HasValue)
       {
         switch (Encoding.Value)
         {
-          case EncodingType.ALaw: formatOptions.Append(" --encoding a-law"); break;
-          case EncodingType.FloatingPoint: formatOptions.Append(" --encoding floating-point"); break;
-          case EncodingType.GsmFullRate: formatOptions.Append(" --encoding gsm-full-rate"); break;
-          case EncodingType.ImaAdpcm: formatOptions.Append(" --encoding ima-adpcm"); break;
-          case EncodingType.MsAdpcm: formatOptions.Append(" --encoding ms-pcm"); break;
-          case EncodingType.MuLaw: formatOptions.Append(" --encoding mu-law"); break;
-          case EncodingType.SignedInteger: formatOptions.Append(" --encoding signed-integer"); break;
-          case EncodingType.UnsignedInteger: formatOptions.Append(" --encoding unsigned-integer"); break;
+          case EncodingType.ALaw: formatOptions.Add("--encoding a-law"); break;
+          case EncodingType.FloatingPoint: formatOptions.Add("--encoding floating-point"); break;
+          case EncodingType.GsmFullRate: formatOptions.Add("--encoding gsm-full-rate"); break;
+          case EncodingType.ImaAdpcm: formatOptions.Add("--encoding ima-adpcm"); break;
+          case EncodingType.MsAdpcm: formatOptions.Add("--encoding ms-pcm"); break;
+          case EncodingType.MuLaw: formatOptions.Add("--encoding mu-law"); break;
+          case EncodingType.SignedInteger: formatOptions.Add("--encoding signed-integer"); break;
+          case EncodingType.UnsignedInteger: formatOptions.Add("--encoding unsigned-integer"); break;
         }
       }
 
       if (ReverseNibbles.HasValue && (ReverseNibbles.Value == true))
-        formatOptions.Append(" --reverse-nibbles");
+        formatOptions.Add("--reverse-nibbles");
 
       if (ReverseBits.HasValue && (ReverseBits.Value == true))
-        formatOptions.Append(" --reverse-bits");
+        formatOptions.Add("--reverse-bits");
 
       if (ByteOrder.HasValue)
       {
         switch (ByteOrder.Value)
         {
-          case ByteOrderType.BigEndian: formatOptions.Append(" --endian big"); break;
-          case ByteOrderType.LittleEndian: formatOptions.Append(" --endian little"); break;
-          case ByteOrderType.Swap: formatOptions.Append(" --endian swap"); break;
+          case ByteOrderType.BigEndian: formatOptions.Add("--endian big"); break;
+          case ByteOrderType.LittleEndian: formatOptions.Add("--endian little"); break;
+          case ByteOrderType.Swap: formatOptions.Add("--endian swap"); break;
         }
       }
 
       if (Channels.HasValue)
-        formatOptions.Append(" --channels " + Channels.Value);
+        formatOptions.Add("--channels " + Channels.Value);
 
       if (SampleRate.HasValue)
-        formatOptions.Append(" --rate " + SampleRate.Value);
+        formatOptions.Add("--rate " + SampleRate.Value);
 
       if (Glob.HasValue && (Glob.Value == false))
-        formatOptions.Append(" --no-glob");
+        formatOptions.Add("--no-glob");
 
       if (!String.IsNullOrEmpty(CustomArgs))
-        formatOptions.Append(" " + CustomArgs);
+        formatOptions.Add(CustomArgs);
 
-      return formatOptions.ToString();
+      return String.Join(" ", formatOptions);
     }
   }
 }
