@@ -5,6 +5,9 @@
   /// </summary>
   public class ReverseEffect : BaseEffect
   {
+    /// <summary>
+    /// SoX effect name.
+    /// </summary>
     public override string Name { get { return "reverse"; } }
 
 
