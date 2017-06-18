@@ -58,6 +58,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Effects\ReverseEffect.cs" />
+    <Compile Include="Effects\SpeedEffect.cs" />
+    <Compile Include="Effects\TremoloEffect.cs" />
     <Compile Include="Events.cs" />
     <Compile Include="AudioInfo.cs" />
     <Compile Include="FormatOptions.cs" />
