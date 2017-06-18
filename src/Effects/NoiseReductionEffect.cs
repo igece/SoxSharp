@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-
+using System.Globalization;
 
 namespace SoxSharp.Effects
 {
@@ -48,9 +48,9 @@ namespace SoxSharp.Effects
       effectArgs.Add(File);
 
       if (Amount.HasValue)
-        effectArgs.Add(Amount.Value.ToString());
+        effectArgs.Add(Amount.Value.ToString(CultureInfo.InvariantCulture));
 
-      return effectArgs.ToString();
+      return string.Join(" ", effectArgs);
     }
   }
 }
