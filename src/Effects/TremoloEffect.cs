@@ -1,6 +1,5 @@
-﻿using System.Text;
-using SoxSharp.Exceptions;
-
+﻿using System.Collections.Generic;
+using System.Globalization;
 
 namespace SoxSharp.Effects
 {
@@ -9,6 +8,9 @@ namespace SoxSharp.Effects
   /// </summary>
   public class TremoloEffect : BaseEffect
   {
+    /// <summary>
+    /// SoX effect name.
+    /// </summary>
     public override string Name { get { return "tremolo"; } }
 
     /// <summary>
@@ -42,16 +44,14 @@ namespace SoxSharp.Effects
     /// <returns>A <see cref="T:System.String"/> containing SoX command arguments to apply a Tremolo effect.</returns>
     public override string ToString()
     {
-      if (Depth.HasValue && (Depth.Value > 100))
-        throw new SoxEffectException(Name, "Depth value shall be in the range 0-100");
+      List<string> effectArgs = new List<string>(3) { Name };
 
-      StringBuilder effectArgs = new StringBuilder(Name);
-      effectArgs.Append(" " + Speed);
+      effectArgs.Add(Speed.ToString(CultureInfo.InvariantCulture));
 
       if (Depth.HasValue)
-        effectArgs.Append(" " + Depth.Value);
+        effectArgs.Add(Depth.Value.ToString());
 
-      return effectArgs.ToString();
+      return string.Join(" ", effectArgs);
     }
   }
 }

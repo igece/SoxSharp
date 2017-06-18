@@ -1,4 +1,4 @@
-﻿using System.Text;
+﻿using System.Collections.Generic;
 using SoxSharp.Effects.Types;
 
 
@@ -68,20 +68,24 @@ namespace SoxSharp.Effects
       Width = width;
     }
 
-
+    /// <summary>
+    /// Translate a <see cref="BassEffect"/> instance to a set of command arguments to be passed to SoX.
+    /// (invalidates <see cref="object.ToString()"/>).
+    /// </summary>
+    /// <returns>A <see cref="T:System.String"/> containing SoX command arguments to apply a Bass effect.</returns>
     public override string ToString()
     {
-      StringBuilder effectArgs = new StringBuilder(Name);
+      List<string> effectArgs = new List<string>(4) { Name };
 
-      effectArgs.Append(" " + Gain);
+      effectArgs.Add(Gain.ToString());
 
       if (Frequency.HasValue)
-        effectArgs.Append(" " + Frequency.Value);
+        effectArgs.Add(Frequency.Value.ToString());
 
       if (Width.HasValue)
-        effectArgs.Append(" " + Width.Value);
+        effectArgs.Add(Width.Value.ToString());
 
-      return effectArgs.ToString();
+      return string.Join(" ", effectArgs);
     }
   }
 }
