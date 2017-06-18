@@ -1,4 +1,6 @@
-﻿namespace SoxSharp.Effects.Types
+﻿using System.Globalization;
+
+namespace SoxSharp.Effects.Types
 {
   public struct Frequency
   {
@@ -34,14 +36,14 @@
         switch (units_.Value)
         {
           case FrequencyUnits.Hz:
-            return value_.ToString() + "h";
+            return value_.ToString(CultureInfo.InvariantCulture) + "h";
 
           case FrequencyUnits.KHz:
-            return value_.ToString() + "k";
+            return value_.ToString(CultureInfo.InvariantCulture) + "k";
         }
       }
 
-      return value_.ToString();
+      return value_.ToString(CultureInfo.InvariantCulture);
     }
   }
 }

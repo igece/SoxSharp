@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-
+using System.Globalization;
 
 namespace SoxSharp.Effects
 {
@@ -34,7 +34,7 @@ namespace SoxSharp.Effects
     public override string ToString()
     {
       List<string> effectArgs = new List<string>(2) { Name };
-      effectArgs.Add(Enhancement.ToString());
+      effectArgs.Add(Enhancement.ToString(CultureInfo.InvariantCulture));
 
       return string.Join(" ", effectArgs);
     }

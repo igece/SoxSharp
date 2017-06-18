@@ -1,5 +1,7 @@
 ﻿
 
+using System.Globalization;
+
 namespace SoxSharp.Effects.Types
 {
   public struct Width
@@ -36,20 +38,20 @@ namespace SoxSharp.Effects.Types
         switch (units_.Value)
         {
           case WidthUnits.Hz:
-            return value_.ToString() + "h";
+            return value_.ToString(CultureInfo.InvariantCulture) + "h";
 
           case WidthUnits.KHz:
-            return value_.ToString() + "k";
+            return value_.ToString(CultureInfo.InvariantCulture) + "k";
 
           case WidthUnits.Octaves:
-            return value_.ToString() + "o";
+            return value_.ToString(CultureInfo.InvariantCulture) + "o";
 
           case WidthUnits.Qfactor:
-            return value_.ToString() + "q";
+            return value_.ToString(CultureInfo.InvariantCulture) + "q";
         }
       }
 
-      return value_.ToString();
+      return value_.ToString(CultureInfo.InvariantCulture);
     }
   }
 }

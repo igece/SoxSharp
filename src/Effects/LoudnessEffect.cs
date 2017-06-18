@@ -1,6 +1,6 @@
 ﻿using SoxSharp.Exceptions;
 using System.Collections.Generic;
-
+using System.Globalization;
 
 namespace SoxSharp.Effects
 {
@@ -70,10 +70,10 @@ namespace SoxSharp.Effects
       List<string> effectArgs = new List<string>(3) { Name };
 
       if (Gain.HasValue)
-        effectArgs.Add(Gain.Value.ToString());
+        effectArgs.Add(Gain.Value.ToString(CultureInfo.InvariantCulture));
 
       if (Reference.HasValue)
-        effectArgs.Add(Reference.Value.ToString());
+        effectArgs.Add(Reference.Value.ToString(CultureInfo.InvariantCulture));
 
       return string.Join(" ", effectArgs);
     }

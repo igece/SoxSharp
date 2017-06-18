@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Globalization;
+using System.Text;
 
 
 namespace SoxSharp.Effects
@@ -11,6 +12,9 @@ namespace SoxSharp.Effects
   /// </summary>
   public class SpeedEffect : BaseEffect
   {
+    /// <summary>
+    /// SoX effect name.
+    /// </summary>
     public override string Name { get { return "speed"; } }
 
     /// <summary>
@@ -46,7 +50,7 @@ namespace SoxSharp.Effects
     public override string ToString()
     {
       StringBuilder effectArgs = new StringBuilder(Name);
-      effectArgs.Append(" " + Factor);
+      effectArgs.Append(" " + Factor.ToString(CultureInfo.InvariantCulture));
 
       if (AsCents.HasValue && (AsCents.Value == true))
         effectArgs.Append("c");

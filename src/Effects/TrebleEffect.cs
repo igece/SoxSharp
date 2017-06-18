@@ -1,6 +1,6 @@
 ﻿using SoxSharp.Effects.Types;
 using System.Collections.Generic;
-
+using System.Globalization;
 
 namespace SoxSharp.Effects
 {
@@ -104,7 +104,7 @@ namespace SoxSharp.Effects
     {
       List<string> effectArgs = new List<string>(4) { Name };
 
-      effectArgs.Add(Gain.ToString());
+      effectArgs.Add(Gain.ToString(CultureInfo.InvariantCulture));
 
       if (Frequency.HasValue)
         effectArgs.Add(Frequency.Value.ToString());

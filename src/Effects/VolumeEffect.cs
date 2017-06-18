@@ -1,6 +1,6 @@
 ﻿using SoxSharp.Effects.Types;
 using System.Collections.Generic;
-
+using System.Globalization;
 
 namespace SoxSharp.Effects
 {
@@ -73,7 +73,7 @@ namespace SoxSharp.Effects
     public override string ToString()
     {
       List<string> effectArgs = new List<string>(4) { Name };
-      effectArgs.Add(Gain.ToString());
+      effectArgs.Add(Gain.ToString(CultureInfo.InvariantCulture));
 
       if (Type.HasValue)
       {
@@ -97,7 +97,7 @@ namespace SoxSharp.Effects
       }
 
       if (Limiter.HasValue)
-        effectArgs.Add(Limiter.Value.ToString());
+        effectArgs.Add(Limiter.Value.ToString(CultureInfo.InvariantCulture));
 
       return string.Join(" ", effectArgs);
     }
