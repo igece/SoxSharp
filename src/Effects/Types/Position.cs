@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Text;
 using System.Collections.Generic;
-using SoxSharp.Exceptions;
 
 
 namespace SoxSharp.Effects.Types
@@ -31,7 +29,7 @@ namespace SoxSharp.Effects.Types
     /// Initializes a new instance of the <see cref="T:SoxSharp.Effects.Types.Position"/> struct.
     /// </summary>
     /// <param name="time">Position expressed as a time value.</param>
-		Position(TimeSpan time)
+    public Position(TimeSpan time)
     {
       time_ = time;
       samples_ = null;
@@ -44,7 +42,7 @@ namespace SoxSharp.Effects.Types
     /// </summary>
     /// <param name="time">Position expressed as a time value.</param>
     /// <param name="from">How</param>
-    Position(TimeSpan time, PositionFrom from)
+    public Position(TimeSpan time, PositionFrom from)
     {
       time_ = time;
       samples_ = null;
@@ -56,7 +54,7 @@ namespace SoxSharp.Effects.Types
     /// Initializes a new instance of the <see cref="T:SoxSharp.Effects.Types.Position"/> struct.
     /// </summary>
     /// <param name="samples">Position expressed as number of samples.</param>
-    Position(uint samples)
+    public Position(uint samples)
     {
       time_ = null;
       samples_ = samples;
@@ -68,7 +66,7 @@ namespace SoxSharp.Effects.Types
     /// </summary>
     /// <param name="samples">Position expressed as number of samples.</param>
     /// <param name="from">Whether the position is to be interpreted relative to the start, end or the previous position.</param>
-    Position(uint samples, PositionFrom from)
+    public Position(uint samples, PositionFrom from)
     {
       time_ = null;
       samples_ = samples;
@@ -90,7 +88,7 @@ namespace SoxSharp.Effects.Types
 
     public override string ToString()
     {
-      List<string> position = new List<string>();
+      List<string> position = new List<string>(3);
 
       if (from_.HasValue)
       {
