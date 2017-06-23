@@ -6,8 +6,13 @@ namespace SoxSharp
   /// <summary>
   /// Input format options.
   /// </summary>
-  public class InputFormatOptions : FormatOptions
+  public class InputFile : FormatOptions
   {
+    /// <summary>
+    /// Input file name.
+    /// </summary>
+    public string FileName { get; set; }
+
     /// <summary>
     /// Input file volume adjustment factor.
     /// </summary>
@@ -20,21 +25,31 @@ namespace SoxSharp
 
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="T:SoxSharp.InputFormatOptions"/> class.
+    /// Initializes a new instance of the <see cref="InputFile"/> class.
     /// </summary>
-    public InputFormatOptions()
+    public InputFile()
     : base()
     {
     }
 
 
     /// <summary>
-    /// Translate a <see cref="InputFormatOptions"/> instance to a set of command arguments to be passed to SoX to be applied to the input file (invalidates <see cref="object.ToString()"/>).
+    /// Initializes a new instance of the <see cref="InputFile"/> class.
+    /// </summary>
+    public InputFile(string fileName)
+    : base()
+    {
+      FileName = fileName;
+    }
+
+
+    /// <summary>
+    /// Translate a <see cref="InputFile"/> instance to a set of command arguments to be passed to SoX to be applied to the input file (invalidates <see cref="object.ToString()"/>).
     /// </summary>
     /// <returns>String containing SoX command arguments.</returns>
     public override string ToString()
     {
-      List<string> inputOptions = new List<string>(3);
+      List<string> inputOptions = new List<string>(4);
 
       string baseStr = base.ToString();
 
@@ -46,6 +61,11 @@ namespace SoxSharp
 
       if (IgnoreLength.HasValue && (IgnoreLength.Value == true))
         inputOptions.Add("--ignore-length");
+
+      if (FileName != null)
+        inputOptions.Add(FileName);
+      else
+        inputOptions.Add("--null");
 
       return string.Join(" ", inputOptions);
     }

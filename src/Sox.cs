@@ -43,11 +43,6 @@ namespace SoxSharp
     public bool? Multithreaded { get; set; }
 
     /// <summary>
-    /// Input format options.
-    /// </summary>
-    public InputFormatOptions Input { get; private set; }
-
-    /// <summary>
     /// Output format options.
     /// </summary>
     public OutputFormatOptions Output { get; private set; }
@@ -83,7 +78,6 @@ namespace SoxSharp
     /// <param name="path">Location of the SoX executable to be used by the library.</param>
     public Sox(string path)
     {
-      Input = new InputFormatOptions();
       Output = new OutputFormatOptions();
       Effects = new List<IBaseEffect>();
       Path = path;
@@ -182,13 +176,24 @@ namespace SoxSharp
       }
     }
 
+
     /// <summary>
     /// Spawns a new SoX process using the specified options in this instance.
     /// </summary>
     /// <param name="inputFile">Audio file to be processed.</param>
     public void Process(string inputFile)
     {
-      Process(inputFile, null);
+      Process(new InputFile[] { new InputFile(inputFile) }, null);
+    }
+
+
+    /// <summary>
+    /// Spawns a new SoX process using the specified options in this instance.
+    /// </summary>
+    /// <param name="inputFile">Audio file to be processed.</param>
+    public void Process(InputFile inputFile)
+    {
+      Process(new InputFile[] { inputFile }, null);
     }
 
 
@@ -198,6 +203,67 @@ namespace SoxSharp
     /// <param name="inputFile">Audio file to be processed.</param>
     /// <param name="outputFile">Output file.</param>
     public void Process(string inputFile, string outputFile)
+    {
+      Process(new InputFile[] { new InputFile(inputFile) }, outputFile);
+    }
+
+
+    /// <summary>
+    /// Spawns a new SoX process using the specified options in this instance.
+    /// </summary>
+    /// <param name="inputFile">Audio file to be processed.</param>
+    /// <param name="outputFile">Output file.</param>
+    public void Process(InputFile inputFile, string outputFile)
+    {
+      Process(new InputFile[] { inputFile }, outputFile);
+    }
+
+
+    /// <summary>
+    /// Spawns a new SoX process using the specified options in this instance.
+    /// </summary>
+    /// <param name="inputFile1">First audio file to be processed.</param>
+    /// <param name="inputFile2">Second audio file to be processed.</param>
+    /// <param name="outputFile">Output file.</param>
+    public void Process(string inputFile1, string inputFile2, string outputFile)
+    {
+      Process(new InputFile[] { new InputFile(inputFile1), new InputFile(inputFile2) }, outputFile);
+    }
+
+
+    /// <summary>
+    /// Spawns a new SoX process using the specified options in this instance.
+    /// </summary>
+    /// <param name="inputFile1">First audio file to be processed.</param>
+    /// <param name="inputFile2">Second audio file to be processed.</param>
+    /// <param name="outputFile">Output file.</param>
+    public void Process(InputFile inputFile1, InputFile inputFile2, string outputFile)
+    {
+      Process(new InputFile[] { inputFile1, inputFile2 }, outputFile);
+    }
+
+
+    /// <summary>
+    /// Spawns a new SoX process using the specified options in this instance.
+    /// </summary>
+    /// <param name="inputFiles">Audio files to be processed.</param>
+    /// <param name="outputFile">Output file.</param>
+    public void Process(string[] inputFiles, string outputFile)
+    {
+      var inputs = new List<InputFile>(inputFiles.Length);
+
+      foreach (var inputFile in inputFiles)
+        inputs.Add(new InputFile(inputFile));
+
+      Process(inputs.ToArray(), outputFile);
+    }
+
+    /// <summary>
+    /// Spawns a new SoX process using the specified options in this instance.
+    /// </summary>
+    /// <param name="inputFiles">Audio files to be processed.</param>
+    /// <param name="outputFile">Output file.</param>
+    public void Process(InputFile[] inputFiles, string outputFile)
     {
       soxProcess_ = SoxProcess.Create(Path);
 
@@ -224,15 +290,18 @@ namespace SoxSharp
 
         args.Add("--show-progress");
 
-        // Input options.
-        args.Add(Input.ToString());
+        // Input options and files.
 
-        if (inputFile != null)
-          args.Add(inputFile);
+        if ((inputFiles != null) && (inputFiles.Length > 0))
+        {
+          foreach (InputFile inputFile in inputFiles)
+            args.Add(inputFile.ToString());
+        }
         else
           args.Add("--null");
 
-        // Output options.
+        // Output options and file.
+
         args.Add(Output.ToString());
 
         if (outputFile != null)
