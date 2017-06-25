@@ -501,4 +501,62 @@
     /// </summary>
     Debug
   }
+
+
+  /// <summary>
+  /// How SoX’s input combiner shall combine multiple input files.
+  /// </summary>
+  public enum CombinationType
+  {
+    /// <summary>
+    /// Use the default combination type (<see cref="CombinationType.Concatenate"/> for Process and Record
+    /// and <see cref="CombinationType.Sequence"/> for Play).
+    /// </summary>
+    Default,
+
+    /// <summary>
+    /// Concatenate all input files (the default for process and record).
+    /// Input files must have the same number of channels. The audio from each input will be concatenated
+    /// in the order given to form the output file.
+    /// </summary>
+    Concatenate,
+
+    /// <summary>
+    /// Merge multiple input files.
+    /// The number of channels in each input file need not be the same. A merged audio file comprises all
+    /// of the channels from all of the input files. For example, two mono files could be merged to form
+    /// one stereo file. The first and second mono files would become the left and right channels of the
+    /// stereo file. Un-merging is possible using multiple invocations of SoX with the remix effect.
+    /// </summary>
+    Merge,
+
+    /// <summary>
+    /// Mix multiple input files.
+    /// The number of channels in each input file need not be the same, but SoX will issue a warning if they
+    /// are not and some channels in the output file will not contain audio from every input file. A mixed
+    /// audio file cannot be un-mixed without reference to the original input files.
+    /// </summary>
+    Mix,
+
+    /// <summary>
+    /// Mix to equal power multiple input files.
+    /// </summary>
+    MixPower,
+
+    /// <summary>
+    /// Multiply samples of corresponding channels from all input files.
+    /// Sample values of corresponding channels are treated as numbers in the interval −1 to +1. If the
+    /// number of channels in the input files is not the same, the missing channels are considered
+    /// to contain all zero.
+    /// </summary>
+    Multiply,
+
+    /// <summary>
+    /// Sequence all input files (the default for play).
+    /// It is similar to <see cref="CombinationType.Concatenate"/> in that the audio from each input file
+    /// is sent serially to the output file. However, here the output file may be closed and reopened at
+    /// the corresponding transition between input files.
+    /// </summary>
+    Sequence
+  }
 }

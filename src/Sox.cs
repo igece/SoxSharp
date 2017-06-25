@@ -62,7 +62,9 @@ namespace SoxSharp
     /// </summary>
     public string CustomEffects { get; set; }
 
-
+    /// <summary>
+    /// Gets the full command line of the last call to SoX.
+    /// </summary>
     public string LastCommand { get; private set; }
 
 
@@ -178,6 +180,88 @@ namespace SoxSharp
 
 
     /// <summary>
+    /// Spawns a new SoX process using the specified options in this instance and record audio the specified file.
+    /// </summary>
+    /// <param name="outputFile">Audio file to be recorded.</param>
+    public void Record(string outputFile)
+    {
+      Process("--default-device", outputFile);
+    }
+
+
+    /// <summary>
+    /// Spawns a new SoX process using the specified options in this instance and plays the specified file.
+    /// </summary>
+    /// <param name="inputFile">Audio file to be played.</param>
+    public void Play(string inputFile)
+    {
+      Process(new InputFile[] { new InputFile(inputFile) }, "--default-device");
+    }
+
+
+    /// <summary>
+    /// Spawns a new SoX process using the specified options in this instance and plays the specified file.
+    /// </summary>
+    /// <param name="inputFile">Audio file to be played.</param>
+    public void Play(InputFile inputFile)
+    {
+      Process(new InputFile[] { inputFile }, "--default-device");
+    }
+
+
+    /// <summary>
+    /// Spawns a new SoX process using the specified options in this instance and plays the specified files.
+    /// </summary>
+    /// <param name="inputFiles">Audio files to be played.</param>
+    public void Play(string[] inputFiles)
+    {
+      var inputs = new List<InputFile>(inputFiles.Length);
+
+      foreach (var inputFile in inputFiles)
+        inputs.Add(new InputFile(inputFile));
+
+      Process(inputs.ToArray(), "--default-device");
+    }
+
+
+    /// <summary>
+    /// Spawns a new SoX process using the specified options in this instance and plays the specified files.
+    /// </summary>
+    /// <param name="inputFiles">Audio files to be played.</param>
+    /// <param name="combination">How to combine the input files.</param>
+    public void Play(string[] inputFiles, CombinationType combination)
+    {
+      var inputs = new List<InputFile>(inputFiles.Length);
+
+      foreach (var inputFile in inputFiles)
+        inputs.Add(new InputFile(inputFile));
+
+      Process(inputs.ToArray(), "--default-device", combination);
+    }
+
+
+    /// <summary>
+    /// Spawns a new SoX process using the specified options in this instance and plays the specified files.
+    /// </summary>
+    /// <param name="inputFiles">Audio files to be played.</param>
+    public void Play(InputFile[] inputFiles)
+    {
+      Process(inputFiles, "--default-device");
+    }
+
+
+    /// <summary>
+    /// Spawns a new SoX process using the specified options in this instance and plays the specified files.
+    /// </summary>
+    /// <param name="inputFiles">Audio files to be played.</param>
+    /// <param name="combination">How to combine the input files.</param>
+    public void Play(InputFile[] inputFiles, CombinationType combination)
+    {
+      Process(inputFiles, "--default-device", combination);
+    }
+
+
+    /// <summary>
     /// Spawns a new SoX process using the specified options in this instance.
     /// </summary>
     /// <param name="inputFile">Audio file to be processed.</param>
@@ -237,9 +321,35 @@ namespace SoxSharp
     /// <param name="inputFile1">First audio file to be processed.</param>
     /// <param name="inputFile2">Second audio file to be processed.</param>
     /// <param name="outputFile">Output file.</param>
+    /// <param name="combination">How to combine the input files.</param>
+    public void Process(string inputFile1, string inputFile2, string outputFile, CombinationType combination)
+    {
+      Process(new InputFile[] { new InputFile(inputFile1), new InputFile(inputFile2) }, outputFile, combination);
+    }
+
+
+    /// <summary>
+    /// Spawns a new SoX process using the specified options in this instance.
+    /// </summary>
+    /// <param name="inputFile1">First audio file to be processed.</param>
+    /// <param name="inputFile2">Second audio file to be processed.</param>
+    /// <param name="outputFile">Output file.</param>
     public void Process(InputFile inputFile1, InputFile inputFile2, string outputFile)
     {
       Process(new InputFile[] { inputFile1, inputFile2 }, outputFile);
+    }
+
+
+    /// <summary>
+    /// Spawns a new SoX process using the specified options in this instance.
+    /// </summary>
+    /// <param name="inputFile1">First audio file to be processed.</param>
+    /// <param name="inputFile2">Second audio file to be processed.</param>
+    /// <param name="outputFile">Output file.</param>
+    /// <param name="combination">How to combine the input files.</param>
+    public void Process(InputFile inputFile1, InputFile inputFile2, string outputFile, CombinationType combination)
+    {
+      Process(new InputFile[] { inputFile1, inputFile2 }, outputFile, combination);
     }
 
 
@@ -258,12 +368,42 @@ namespace SoxSharp
       Process(inputs.ToArray(), outputFile);
     }
 
+
+    /// <summary>
+    /// Spawns a new SoX process using the specified options in this instance.
+    /// </summary>
+    /// <param name="inputFiles">Audio files to be processed.</param>
+    /// <param name="outputFile">Output file.</param>
+    /// <param name="combination">How to combine the input files.</param>
+    public void Process(string[] inputFiles, string outputFile, CombinationType combination)
+    {
+      var inputs = new List<InputFile>(inputFiles.Length);
+
+      foreach (var inputFile in inputFiles)
+        inputs.Add(new InputFile(inputFile));
+
+      Process(inputs.ToArray(), outputFile, combination);
+    }
+
+
     /// <summary>
     /// Spawns a new SoX process using the specified options in this instance.
     /// </summary>
     /// <param name="inputFiles">Audio files to be processed.</param>
     /// <param name="outputFile">Output file.</param>
     public void Process(InputFile[] inputFiles, string outputFile)
+    {
+      Process(inputFiles, outputFile, CombinationType.Default);
+    }
+
+
+    /// <summary>
+    /// Spawns a new SoX process using the specified options in this instance.
+    /// </summary>
+    /// <param name="inputFiles">Audio files to be processed.</param>
+    /// <param name="outputFile">Output file.</param>
+    /// <param name="combination">How to combine the input files.</param>
+    public void Process(InputFile[] inputFiles, string outputFile, CombinationType combination)
     {
       soxProcess_ = SoxProcess.Create(Path);
 
@@ -287,6 +427,33 @@ namespace SoxSharp
 
         if (!String.IsNullOrEmpty(CustomArgs))
           args.Add(CustomArgs);
+
+        switch (combination)
+        {
+          case CombinationType.Concatenate:
+            args.Add("--combine concatenate");
+            break;
+
+          case CombinationType.Merge:
+            args.Add("--combine merge");
+            break;
+
+          case CombinationType.Mix:
+            args.Add("--combine mix");
+            break;
+
+          case CombinationType.MixPower:
+            args.Add("--combine mix-power");
+            break;
+
+          case CombinationType.Multiply:
+            args.Add("--combine multiply");
+            break;
+
+          case CombinationType.Sequence:
+            args.Add("--combine sequence");
+            break;
+        }
 
         args.Add("--show-progress");
 
