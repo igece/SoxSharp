@@ -12,6 +12,7 @@ namespace SoxSharp
     /// Initializes a <see cref="T:SoxSharp.LogMessageEventArgs"/> instance with the provided values.
     /// </summary>
     /// <param name="logLevel">Message severity.</param>
+    /// <param name="source">Message source.</param>
     /// <param name="message">Message text.</param>
     public LogMessageEventArgs(LogLevelType logLevel, string source, string message)
     {
