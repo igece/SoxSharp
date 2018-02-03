@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 
 namespace SoxSharp
@@ -62,8 +63,21 @@ namespace SoxSharp
       if (IgnoreLength.HasValue && (IgnoreLength.Value == true))
         inputOptions.Add("--ignore-length");
 
-      if (FileName != null)
-        inputOptions.Add(FileName);
+      if (!string.IsNullOrEmpty(FileName))
+      {
+        if (FileName.Contains(" "))
+        {
+          if ((Environment.OSVersion.Platform == PlatformID.Win32NT) ||
+              (Environment.OSVersion.Platform == PlatformID.Win32Windows) ||
+              (Environment.OSVersion.Platform == PlatformID.Win32S) ||
+              (Environment.OSVersion.Platform == PlatformID.WinCE))
+            inputOptions.Add("\"" + FileName + "\"");
+          else
+            inputOptions.Add("'" + FileName + "'");
+        }
+        else
+          inputOptions.Add(FileName);
+      }
       else
         inputOptions.Add("--null");
 

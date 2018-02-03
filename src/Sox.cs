@@ -124,7 +124,20 @@ namespace SoxSharp
       try
       {
         soxProcess_.StartInfo.RedirectStandardOutput = true;
-        soxProcess_.StartInfo.Arguments = "--info " + inputFile;
+
+        if (inputFile.Contains(" "))
+        {
+          if ((Environment.OSVersion.Platform == PlatformID.Win32NT) ||
+              (Environment.OSVersion.Platform == PlatformID.Win32Windows) ||
+              (Environment.OSVersion.Platform == PlatformID.Win32S) ||
+              (Environment.OSVersion.Platform == PlatformID.WinCE))
+            soxProcess_.StartInfo.Arguments = "--info \"" + inputFile + "\"";
+          else
+            soxProcess_.StartInfo.Arguments = "--info '" + inputFile + "'";
+        }
+        else
+          soxProcess_.StartInfo.Arguments = "--info " + inputFile;
+
         soxProcess_.Start();
 
         LastCommand = Path + " " + soxProcess_.StartInfo.Arguments;
@@ -471,8 +484,21 @@ namespace SoxSharp
 
         args.Add(Output.ToString());
 
-        if (outputFile != null)
-          args.Add(outputFile);
+        if (!string.IsNullOrEmpty(outputFile))
+        {
+          if (outputFile.Contains(" "))
+          {
+            if ((Environment.OSVersion.Platform == PlatformID.Win32NT) ||
+                (Environment.OSVersion.Platform == PlatformID.Win32Windows) ||
+                (Environment.OSVersion.Platform == PlatformID.Win32S) ||
+                (Environment.OSVersion.Platform == PlatformID.WinCE))
+              args.Add("\"" + outputFile + "\"");
+            else
+              args.Add("'" + outputFile + "'");
+          }
+          else
+            args.Add(outputFile);
+        }
         else
           args.Add("--null");
 
