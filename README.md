@@ -23,12 +23,12 @@ using (Sox sox = new Sox("sox.exe"))
 }
 ```
 
-This is the same as executing `sox --info test.wav`. SoxSharp parses the SoX output and fills a **AudioInfo** instance with the retrieved information.
+This is the same as executing `sox --info test.wav`. SoxSharp parses the SoX output and fills an **AudioInfo** instance with the retrieved information.
 
 
 #### File Conversion
 
-The simplest way to perform an audio conversion is to just call the **Process** method with both input and output files:
+The simplest way to perform an audio conversion is to just call the **Sox.Process** method with both input and output files:
 
 ```cs
 using (Sox sox = new Sox("sox.exe"))
@@ -53,7 +53,24 @@ using (Sox sox = new Sox("sox.exe"))
 
 This is equivalent to call SoX with the following parameters: `sox test.wav --type mp3 --rate 32000 test.mp3`.
 
-SoX global options can be set through their respective properties in the **Sox** class. Format options to be applied to input and output can be stablished through their respective properties in **Sox.InputOptions** and **Sox.OutputOptions** members.
+SoX global options can be set through their respective properties in the **Sox** class. Format options to be applied to the output can be stablished through its respective properties in **Sox.Output**.
+
+Format options to be applied to the input are specified passing an **InputFile** instance to the **Sox.Process** method (instead of an input file string):
+
+```cs
+using (Sox sox = new Sox("sox.exe"))
+{
+  sox.Output.Type = FileType.MP3;
+  sox.Output.SampleRate = 32000;
+
+  InputFile testInput = new InputFile("test.wav");
+  testInput.Volume = 0.8;
+
+  sox.Process(testInput, "test.mp3");
+}
+```
+
+This is equivalent to call SoX with the following parameters: `sox --volume 0.8 test.wav --type mp3 --rate 32000 test.mp3`.
 
 
 #### Applying Effects
@@ -64,7 +81,7 @@ One or multiple effects can be added so they will applied to the output file:
 using (Sox sox = new Sox("sox.exe"))
 {
   sox.Output.Type = FileType.MP3;
-  sox.Effects.Add(new VolumeEffect(10, GainType.Db);
+  sox.Effects.Add(new VolumeEffect(10, GainType.Db));
   sox.Effects.Add(new HighPassFilterEffect(500));
 
   sox.Process("test.wav", "test.mp3");
@@ -74,9 +91,22 @@ using (Sox sox = new Sox("sox.exe"))
 Currently not all SoX effects have been implemented into SoxSharp. To see which effects are supported, please read [this issue](https://github.com/igece/SoxSharp/issues/1).
 
 
+#### Playing and Recording
+
+To record audio from the default audio device, use the **Sox.Record** method specifying the output file name:
+
+```cs
+sox.Record("test_record.mp3");
+```
+
+Analogously, **Sox.Play** allows to send an input file to the default audio device. In this case, the input file can be expressed as an file name string or a **InputFile** instance.
+
+The same results can be obtained if calling **Sox.Process** using `--default-device` as output (for playing) or input (for recording) file.
+
+
 #### Error Handling
 
-If any requested SoX operation is unable to be processed, either because SoX process can't be launched or it generates an error, a **SoxException** with details about the error will be thrown.
+If any requested SoX operation is unable to be processed, either because SoX process can't be launched or beacuse it generates an error, a **SoxException** with details about the error will be thrown.
 
 
 #### Events
