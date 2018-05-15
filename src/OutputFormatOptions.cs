@@ -24,9 +24,9 @@ namespace SoxSharp
     public string AddComment { get; set; }
 
     /// <summary>
-    /// Normalise output file.
+    /// Normalize output file.
     /// </summary>
-    public bool Normalise { get; set; }
+    public bool Normalize { get; set; }
 
 
     /// <summary>
@@ -60,7 +60,7 @@ namespace SoxSharp
       if (Comment != null)
         outputOptions.Add("--comment \"" + Comment + "\"");
 
-      if (Normalise)
+      if (Normalize)
         outputOptions.Add("--norm");
 
       return string.Join(" ", outputOptions);
