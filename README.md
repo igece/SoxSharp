@@ -1,3 +1,5 @@
+![Build status](https://ci.appveyor.com/api/projects/status/yekf3ohm8jo8fkt5?svg=true)
+
 ## SoxSharp
 
 SoxSharp is a C# library that serves as a wrapper to [SoX - the Sound eXchange tool](http://sox.sourceforge.net/).
