@@ -23,11 +23,6 @@ namespace SoxSharp
     /// </summary>
     public string AddComment { get; set; }
 
-    /// <summary>
-    /// Normalize output file.
-    /// </summary>
-    public bool Normalize { get; set; }
-
 
     /// <summary>
     /// Initializes a new instance of the <see cref="T:SoxSharp.OutputFormatOptions"/> class.
@@ -44,7 +39,7 @@ namespace SoxSharp
     /// <returns>String containing SoX command arguments.</returns>
     public override string ToString()
     {
-      List<string> outputOptions = new List<string>(5);
+      List<string> outputOptions = new List<string>(4);
 
       string baseStr = base.ToString();
 
@@ -59,9 +54,6 @@ namespace SoxSharp
 
       if (Comment != null)
         outputOptions.Add("--comment \"" + Comment + "\"");
-
-      if (Normalize)
-        outputOptions.Add("--norm");
 
       return string.Join(" ", outputOptions);
     }
