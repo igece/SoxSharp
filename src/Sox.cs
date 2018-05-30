@@ -163,7 +163,7 @@ namespace SoxSharp
               UInt16 channels = Convert.ToUInt16(double.Parse(matchInfo.Groups[1].Value, CultureInfo.InvariantCulture));
               UInt32 sampleRate = Convert.ToUInt32(double.Parse(matchInfo.Groups[2].Value, CultureInfo.InvariantCulture));
               UInt16 sampleSize = Convert.ToUInt16(double.Parse(new string(matchInfo.Groups[3].Value.Where(Char.IsDigit).ToArray()), CultureInfo.InvariantCulture));
-              TimeSpan duration = TimeSpan.ParseExact(matchInfo.Groups[4].Value, @"hh\:mm\:ss\.ff", CultureInfo.InvariantCulture);
+              TimeSpan duration = Utils.TimeSpanFromString(matchInfo.Groups[4].Value);
               UInt64 size = FormattedSize.ToUInt64(matchInfo.Groups[5].Value);
               UInt32 bitRate = FormattedSize.ToUInt32(matchInfo.Groups[6].Value);
               string encoding = matchInfo.Groups[7].Value;
@@ -565,8 +565,8 @@ namespace SoxSharp
             try
             {
               UInt16 progress = Convert.ToUInt16(double.Parse(matchProgress.Groups[1].Value, CultureInfo.InvariantCulture));
-              TimeSpan processed = TimeSpan.ParseExact(matchProgress.Groups[2].Value, @"hh\:mm\:ss\.ff", CultureInfo.InvariantCulture);
-              TimeSpan remaining = TimeSpan.ParseExact(matchProgress.Groups[3].Value, @"hh\:mm\:ss\.ff", CultureInfo.InvariantCulture);
+              TimeSpan processed = Utils.TimeSpanFromString(matchProgress.Groups[2].Value);
+              TimeSpan remaining = Utils.TimeSpanFromString(matchProgress.Groups[3].Value);
               UInt64 outputSize = FormattedSize.ToUInt64(matchProgress.Groups[4].Value);
 
               ProgressEventArgs eventArgs = new ProgressEventArgs(progress, processed, remaining, outputSize);
