@@ -21,7 +21,7 @@ namespace SoxSharp
           return TimeSpan.FromSeconds(Convert.ToDouble(parts[0], CultureInfo.InvariantCulture));
 
         case 2:
-          return TimeSpan.FromSeconds(parts.Zip(weights2, (d, w) => String.IsNullOrEmpty(d) ? 0 : Convert.ToDouble(d , CultureInfo.InvariantCulture) * w).Sum());
+          return TimeSpan.FromSeconds(parts.Zip(weights2, (d, w) => String.IsNullOrEmpty(d) ? 0 : Convert.ToDouble(d, CultureInfo.InvariantCulture) * w).Sum());
 
         case 3:
           return TimeSpan.FromSeconds(parts.Zip(weights3, (d, w) => String.IsNullOrEmpty(d) ? 0 : Convert.ToDouble(d, CultureInfo.InvariantCulture) * w).Sum());
