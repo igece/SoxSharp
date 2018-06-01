@@ -611,10 +611,10 @@ namespace SoxSharp
     }
 
 
-    private bool CheckForLogMessage(string data)
+    private void CheckForLogMessage(string data)
     {
       if (string.IsNullOrEmpty(data))
-        return false;
+        return;
 
       Match logMatch = SoxProcess.LogRegex.Match(data);
 
@@ -641,11 +641,7 @@ namespace SoxSharp
           if (String.IsNullOrEmpty(lastErrorSource_))
             lastErrorSource_ = source;
         }
-
-        return true;
       }
-
-      return false;
     }
 
 
