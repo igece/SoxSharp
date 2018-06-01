@@ -8,6 +8,9 @@ namespace SoxSharp.Exceptions
   /// </summary>
   public class SoxEffectException : SoxException
   {
+    /// <summary>
+    /// Name of the effect that caused the exception.
+    /// </summary>
     public string EffectName { get; private set; }
 
     /// <summary>
