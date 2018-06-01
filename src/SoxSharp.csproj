@@ -66,6 +66,7 @@
     <Compile Include="Effects\Types\OptimizationType.cs" />
     <Compile Include="Events.cs" />
     <Compile Include="AudioInfo.cs" />
+    <Compile Include="Exceptions\SoxUnexpectedOutputException.cs" />
     <Compile Include="Utils.cs" />
     <Compile Include="FormatOptions.cs" />
     <Compile Include="InputFile.cs" />

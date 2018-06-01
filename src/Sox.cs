@@ -173,12 +173,12 @@ namespace SoxSharp
 
             catch (Exception ex)
             {
-              throw new SoxException("Cannot parse SoX output", ex);
+              throw new SoxUnexpectedOutputException(output, ex);
             }
           }
         }
 
-        throw new SoxException("Unexpected output from SoX");
+        throw new SoxUnexpectedOutputException(output != null ? output : "No output received");
       }
 
       finally
@@ -578,16 +578,9 @@ namespace SoxSharp
               return;
             }
 
-            catch (OverflowException)
-            {
-              // SoX v14.3.1 (at least) sometimes report invalid time values (i.e. 06:31:60.00).
-              // Just ignore this progress update.
-              return;
-            }
-
             catch (Exception ex)
             {
-              throw new SoxException("Unexpected output from SoX", ex);
+              throw new SoxUnexpectedOutputException(received.Data, ex);
             }
           }
         }
@@ -618,7 +611,7 @@ namespace SoxSharp
     }
 
 
-    protected bool CheckForLogMessage(string data)
+    private bool CheckForLogMessage(string data)
     {
       if (string.IsNullOrEmpty(data))
         return false;
