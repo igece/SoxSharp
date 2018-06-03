@@ -107,7 +107,8 @@ namespace SoxSharp.Effects.Types
             break;
 
           default:
-            throw new InvalidOperationException("Unexpected value");
+            // Do nothing;
+            break;
         }
       }
 

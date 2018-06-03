@@ -41,8 +41,8 @@ namespace SoxSharp.Effects.Types
           case FrequencyUnits.KHz:
             return value_.ToString(CultureInfo.InvariantCulture) + "k";
 
-          default:
-            throw new System.InvalidOperationException("Unexpected value");
+          default:            
+            break; // Do nothing.
         }
       }
 

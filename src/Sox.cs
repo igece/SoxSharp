@@ -468,7 +468,8 @@ namespace SoxSharp
             break;
 
           default:
-            throw new InvalidOperationException("Unexpected value");
+            // Do nothing.
+            break;
         }
 
         args.Add("--show-progress");

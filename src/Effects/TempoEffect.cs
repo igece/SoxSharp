@@ -150,7 +150,8 @@ namespace SoxSharp.Effects
 
           default:
 
-            throw new System.InvalidOperationException("Unexpected Optimization value");
+            // Do nothing.
+            break;
         }
       }
 

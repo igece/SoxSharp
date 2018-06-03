@@ -100,7 +100,8 @@ namespace SoxSharp.Effects
 
           default:
 
-            throw new System.InvalidOperationException("Unexpected Type value");
+            // Do nothing;
+            break;
         }
       }
 
