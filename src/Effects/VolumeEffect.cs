@@ -93,6 +93,9 @@ namespace SoxSharp.Effects
 
             effectArgs.Add("dB");
             break;
+
+          default:
+            throw new System.InvalidOperationException("Unexpected value");
         }
       }
 

@@ -90,6 +90,7 @@ namespace SoxSharp
           case EncodingType.MuLaw: formatOptions.Add("--encoding mu-law"); break;
           case EncodingType.SignedInteger: formatOptions.Add("--encoding signed-integer"); break;
           case EncodingType.UnsignedInteger: formatOptions.Add("--encoding unsigned-integer"); break;
+          default: throw new InvalidOperationException("Unexpected value");
         }
       }
 
@@ -106,6 +107,7 @@ namespace SoxSharp
           case ByteOrderType.BigEndian: formatOptions.Add("--endian big"); break;
           case ByteOrderType.LittleEndian: formatOptions.Add("--endian little"); break;
           case ByteOrderType.Swap: formatOptions.Add("--endian swap"); break;
+          default: throw new InvalidOperationException("Unexpected value");
         }
       }
 

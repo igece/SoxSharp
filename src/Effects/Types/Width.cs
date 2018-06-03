@@ -48,6 +48,9 @@ namespace SoxSharp.Effects.Types
 
           case WidthUnits.Qfactor:
             return value_.ToString(CultureInfo.InvariantCulture) + "q";
+
+          default:
+            throw new System.InvalidOperationException("Unexpected value");
         }
       }
 

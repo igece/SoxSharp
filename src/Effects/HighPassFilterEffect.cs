@@ -97,6 +97,10 @@ namespace SoxSharp.Effects
 
             effectArgs.Add("-2");
             break;
+
+          default:
+
+            throw new System.InvalidOperationException("Unexpected Type value");
         }
       }
 

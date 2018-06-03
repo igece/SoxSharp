@@ -466,6 +466,9 @@ namespace SoxSharp
           case CombinationType.Sequence:
             args.Add("--combine sequence");
             break;
+
+          default:
+            throw new InvalidOperationException("Unexpected value");
         }
 
         args.Add("--show-progress");

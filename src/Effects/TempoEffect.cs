@@ -147,6 +147,10 @@ namespace SoxSharp.Effects
 
             effectArgs.Add("-l");
             break;
+
+          default:
+
+            throw new System.InvalidOperationException("Unexpected Optimization value");
         }
       }
 

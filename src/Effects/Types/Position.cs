@@ -105,6 +105,9 @@ namespace SoxSharp.Effects.Types
           case PositionFrom.Last:
             position.Add("+");
             break;
+
+          default:
+            throw new InvalidOperationException("Unexpected value");
         }
       }
 
