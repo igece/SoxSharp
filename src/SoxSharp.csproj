@@ -1,137 +1,18 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="packages\NuGet.Build.Packaging.0.2.2\build\NuGet.Build.Packaging.props" Condition="Exists('packages\NuGet.Build.Packaging.0.2.2\build\NuGet.Build.Packaging.props')" />
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
-  <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{900A3274-0A8A-4AF3-A34F-CCB27114E58F}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SoxSharp</RootNamespace>
-    <AssemblyName>SoxSharp</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
-    <PackageId>SoxSharp</PackageId>
-    <PackageVersion>1.3.3</PackageVersion>
-    <Authors>igece.labs</Authors>
-    <PackageLicenseUrl>https://github.com/igece/SoxSharp/blob/master/LICENSE</PackageLicenseUrl>
-    <PackageProjectUrl>https://github.com/igece/SoxSharp</PackageProjectUrl>
-    <Summary>Library that serves as a wrapper to SoX - the Sound eXchange tool.</Summary>
-    <PackageTags>sox wrapper audio conversion filters</PackageTags>
-    <Title>SoxSharp</Title>
-    <Description>Library that serves as a wrapper to SoX - the Sound eXchange tool.</Description>
-    <ReleaseVersion>1.3.*</ReleaseVersion>
-    <PackOnBuild>true</PackOnBuild>
-    <TargetFrameworkProfile />
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <IntermediateOutputPath>..\obj\Debug\</IntermediateOutputPath>
-    <OutputPath>..\bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <DocumentationFile>..\bin\Debug\SoxSharp.XML</DocumentationFile>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>
-    </DebugType>
-    <Optimize>true</Optimize>
-    <IntermediateOutputPath>..\obj\Release\</IntermediateOutputPath>
-    <OutputPath>..\bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <DocumentationFile>..\bin\Release\SoxSharp.xml</DocumentationFile>
-  </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Effects\ReverseEffect.cs" />
-    <Compile Include="Effects\SpeedEffect.cs" />
-    <Compile Include="Effects\TempoEffect.cs" />
-    <Compile Include="Effects\TremoloEffect.cs" />
-    <Compile Include="Effects\Types\OptimizationType.cs" />
-    <Compile Include="Events.cs" />
-    <Compile Include="AudioInfo.cs" />
-    <Compile Include="Exceptions\SoxUnexpectedOutputException.cs" />
-    <Compile Include="Utils.cs" />
-    <Compile Include="FormatOptions.cs" />
-    <Compile Include="InputFile.cs" />
-    <Compile Include="OutputFormatOptions.cs" />
-    <Compile Include="Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Sox.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Types.cs" />
-    <Compile Include="FormattedSize.cs" />
-    <Compile Include="SoxProcess.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Effects\IBaseEffect.cs" />
-    <Compile Include="Effects\BaseEffect.cs" />
-    <Compile Include="Effects\NoiseProfileEffect.cs" />
-    <Compile Include="Effects\NoiseReductionEffect.cs" />
-    <Compile Include="Effects\HighPassFilterEffect.cs" />
-    <Compile Include="Effects\Types\Width.cs" />
-    <Compile Include="Effects\Types\FilterType.cs" />
-    <Compile Include="Effects\Types\Frequency.cs" />
-    <Compile Include="Effects\Types\WidthUnits.cs" />
-    <Compile Include="Effects\Types\FrequencyUnits.cs" />
-    <Compile Include="Effects\TrimEffect.cs" />
-    <Compile Include="Effects\Types\Position.cs" />
-    <Compile Include="Effects\Types\PositionFrom.cs" />
-    <Compile Include="Effects\VolumeEffect.cs" />
-    <Compile Include="Effects\Types\GainType.cs" />
-    <Compile Include="Effects\AllPassFilterEffect.cs" />
-    <Compile Include="Effects\BassEffect.cs" />
-    <Compile Include="Effects\TrebleEffect.cs" />
-    <Compile Include="Effects\LowPassFilterEffect.cs" />
-    <Compile Include="Effects\BandPassFilterEffect.cs" />
-    <Compile Include="Effects\BandRejectFilterEffect.cs" />
-    <Compile Include="Effects\ContrastEffect.cs" />
-    <Compile Include="Effects\LoudnessEffect.cs" />
-    <Compile Include="Exceptions\SoxException.cs" />
-    <Compile Include="Exceptions\SoxEffectException.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>Este proyecto hace referencia a los paquetes NuGet que faltan en este equipo. Use la restauración de paquetes NuGet para descargarlos. Para obtener más información, consulte http://go.microsoft.com/fwlink/?LinkID=322105. El archivo que falta es {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('packages\NuGet.Build.Packaging.0.2.2\build\NuGet.Build.Packaging.props')" Text="$([System.String]::Format('$(ErrorText)', 'packages\NuGet.Build.Packaging.0.2.2\build\NuGet.Build.Packaging.props'))" />
-    <Error Condition="!Exists('packages\NuGet.Build.Packaging.0.2.2\build\NuGet.Build.Packaging.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\NuGet.Build.Packaging.0.2.2\build\NuGet.Build.Packaging.targets'))" />
-  </Target>
-  <Import Project="packages\NuGet.Build.Packaging.0.2.2\build\NuGet.Build.Packaging.targets" Condition="Exists('packages\NuGet.Build.Packaging.0.2.2\build\NuGet.Build.Packaging.targets')" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<OutputType>Library</OutputType>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<LangVersion>latest</LangVersion>
+	</PropertyGroup>
+	<ItemGroup>
+		<PackageReference Include="NuGet.Build.Packaging">
+			<Version>0.2.2</Version>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+			<PrivateAssets>all</PrivateAssets>
+		</PackageReference>
+	</ItemGroup>
+	<ItemGroup>
+	  <Folder Include="Properties\" />
+	</ItemGroup>
 </Project>
