@@ -22,7 +22,7 @@ namespace SoxSharp
     /// <summary>
     /// Sample size (bits).
     /// </summary>
-    public UInt16? SampleSize { get; set; }
+    public ushort? SampleSize { get; set; }
 
     /// <summary>
     /// Encoded nibble order.
@@ -42,12 +42,12 @@ namespace SoxSharp
     /// <summary>
     /// Number of audio channels.
     /// </summary>
-    public UInt16? Channels { get; set; }
+    public ushort? Channels { get; set; }
 
     /// <summary>
     /// Audio sample rate.
     /// </summary>
-    public UInt32? SampleRate { get; set; }
+    public uint? SampleRate { get; set; }
 
     /// <summary>
     /// Allow glob wildcard match filename.
@@ -73,7 +73,7 @@ namespace SoxSharp
     /// <returns>String containing SoX command arguments.</returns>
     public override string ToString()
     {
-      List<string> formatOptions = new List<string>();
+      var formatOptions = new List<string>();
 
       if (Type.HasValue)
         formatOptions.Add("--type " + Type.Value.ToString().ToLower());
@@ -93,6 +93,9 @@ namespace SoxSharp
           default: break; // Do nothing.
         }
       }
+
+      if (SampleSize.HasValue)
+        formatOptions.Add("--bits " + SampleSize.Value);
 
       if (ReverseNibbles.HasValue && (ReverseNibbles.Value == true))
         formatOptions.Add("--reverse-nibbles");
@@ -120,7 +123,7 @@ namespace SoxSharp
       if (Glob.HasValue && (Glob.Value == false))
         formatOptions.Add("--no-glob");
 
-      if (!String.IsNullOrEmpty(CustomArgs))
+      if (!string.IsNullOrEmpty(CustomArgs))
         formatOptions.Add(CustomArgs);
 
       return string.Join(" ", formatOptions);
