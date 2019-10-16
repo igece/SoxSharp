@@ -8,7 +8,14 @@ jobs:
     runs-on: windows-latest
     
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@master
+
+    - name: Setup Nuget.exe
+      uses: warrenbuckley/Setup-Nuget@v1
+
+    - name: Restore Nuget packages
+      run: nuget.exe restore src/SoxSharp.sln
+
     - name: Build library
       run: |
         "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin\MSBuild.exe" src\SoxSharp.sln
