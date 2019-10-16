@@ -9,7 +9,5 @@ jobs:
     
     steps:
     - uses: actions/checkout@v1
-    - name: Run a one-line script
-      run: nuget restore src/SoxSharp.sln
-    - name: Run a one-line script
-      run: msbuild "src\SoxSharp.sln" /verbosity:minimal
+    - name: Build library
+      run: "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin\MSBuild.exe" "src\SoxSharp.sln" /verbosity:minimal
