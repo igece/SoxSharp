@@ -14,7 +14,7 @@ jobs:
       uses: warrenbuckley/Setup-Nuget@v1
 
     - name: Setup MSBuild.exe
-      uses: warrenbucley/Setup-MSBuild@v1
+      uses: warrenbuckley/Setup-MSBuild@v1
 
     - name: Restore Nuget packages
       run: nuget.exe restore src/SoxSharp.sln
