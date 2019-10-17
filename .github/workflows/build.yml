@@ -1,4 +1,4 @@
-name: CI
+name: Continuous Integration
 
 on: [push]
 
@@ -13,9 +13,11 @@ jobs:
     - name: Setup Nuget.exe
       uses: warrenbuckley/Setup-Nuget@v1
 
+    - name: Setup MSBuild.exe
+      uses: warrenbucley/Setup-MSBuild@v1
+
     - name: Restore Nuget packages
       run: nuget.exe restore src/SoxSharp.sln
 
     - name: Build library
-      run: |
-        "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin\MSBuild.exe" src\SoxSharp.sln
+      run: msbuild -verbosity:minimal src/SoxSharp.sln
