@@ -1,4 +1,6 @@
-![Build status](https://ci.appveyor.com/api/projects/status/yekf3ohm8jo8fkt5?svg=true)
+[![nuget](https://img.shields.io/nuget/v/SoxSharp.svg)](https://www.nuget.org/packages/SoxSharp)
+[![nuget](https://img.shields.io/nuget/dt/SoxSharp.svg)](https://www.nuget.org/packages/SoxSharp)
+[![Build status](https://ci.appveyor.com/api/projects/status/yekf3ohm8jo8fkt5?svg=true)](https://ci.appveyor.com/project/igece/soxsharp)
 
 ## SoxSharp
 
