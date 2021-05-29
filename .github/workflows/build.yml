@@ -1,23 +1,23 @@
-name: Continuous Integration
+name: CI Build
 
-on: [push]
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
 jobs:
   build:
 
     runs-on: windows-latest
-    
+
     steps:
-    - uses: actions/checkout@master
-
-    - name: Setup Nuget.exe
-      uses: warrenbuckley/Setup-Nuget@v1
-
-    - name: Setup MSBuild.exe
-      uses: warrenbuckley/Setup-MSBuild@v1
-
-    - name: Restore Nuget packages
-      run: nuget.exe restore src/SoxSharp.sln
-
-    - name: Build library
-      run: msbuild -verbosity:minimal src/SoxSharp.sln
+    - uses: actions/checkout@v2
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 5.0.x
+    - name: Restore dependencies
+      run: dotnet restore src\ObjDiff.sln
+    - name: Build
+      run: dotnet build --no-restore src\SoxSharp.sln
