@@ -18,6 +18,6 @@ jobs:
       with:
         dotnet-version: 5.0.x
     - name: Restore dependencies
-      run: dotnet restore src\ObjDiff.sln
+      run: dotnet restore src\SoxSharp.sln
     - name: Build
       run: dotnet build --no-restore src\SoxSharp.sln
