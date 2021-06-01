@@ -20,7 +20,7 @@ When instantiating the **Sox** class, we pass to the constructor the location of
 Usage is pretty straightforward:
 
 ```cs
-using (Sox sox = new Sox("sox.exe"))
+using (var sox = new Sox("sox.exe"))
 {
   AudioInfo wavInfo = sox.GetInfo("test.wav");
   Console.WriteLine(wavInfo);
@@ -35,7 +35,7 @@ This is the same as executing `sox --info test.wav`. SoxSharp parses the SoX out
 The simplest way to perform an audio conversion is to just call the **Sox.Process** method with both input and output files:
 
 ```cs
-using (Sox sox = new Sox("sox.exe"))
+using (var sox = new Sox("sox.exe"))
 {
   sox.Process("test.wav", "test.mp3");
 }
@@ -46,7 +46,7 @@ The previous code will launch SoX with 'test.wav' as input file and 'test.mp3' a
 To force the output to be encoded with MP3 format (instead of letting SoX to guess it from the output file extension) and use a sample rate of 32 KHz:
 
 ```cs
-using (Sox sox = new Sox("sox.exe"))
+using (var sox = new Sox("sox.exe"))
 {
   sox.Output.Type = FileType.MP3;
   sox.Output.SampleRate = 32000;
@@ -62,7 +62,7 @@ SoX global options can be set through their respective properties in the **Sox**
 Format options to be applied to the input are specified passing an **InputFile** instance to the **Sox.Process** method (instead of an input file string):
 
 ```cs
-using (Sox sox = new Sox("sox.exe"))
+using (var sox = new Sox("sox.exe"))
 {
   sox.Output.Type = FileType.MP3;
   sox.Output.SampleRate = 32000;
@@ -82,7 +82,7 @@ This is equivalent to call SoX with the following parameters: `sox --volume 0.8 
 One or multiple effects can be added so they will applied to the output file:
 
 ```cs
-using (Sox sox = new Sox("sox.exe"))
+using (var sox = new Sox("sox.exe"))
 {
   sox.Output.Type = FileType.MP3;
   sox.Effects.Add(new VolumeEffect(10, GainType.Db));
