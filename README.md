@@ -1,6 +1,6 @@
 [![nuget](https://img.shields.io/nuget/v/SoxSharp.svg)](https://www.nuget.org/packages/SoxSharp)
 [![nuget](https://img.shields.io/nuget/dt/SoxSharp.svg)](https://www.nuget.org/packages/SoxSharp)
-[![CI build](https://github.com/igece/SoxSharp/actions/workflows/build.yml/badge.svg)](https://github.com/igece/SoxSharp/actions/workflows/build.yml)
+[![Build](https://github.com/igece/SoxSharp/actions/workflows/build.yml/badge.svg)](https://github.com/igece/SoxSharp/actions/workflows/build.yml)
 
 ## SoxSharp
 
